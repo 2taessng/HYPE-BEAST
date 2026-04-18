@@ -4,336 +4,250 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HYPE BEAST TYPE TEST</title>
-    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --hb-blue: #0033FF;
-            --hb-dark: #001A80;
-            --hb-light: #F2F2F2;
-            --white: #FFFFFF;
+            --main-bg: #4253A4; --bar-bg: #5367c9; --btn-dark-navy: #1B2450; 
+            --text-black: #000000; --window-bg: #000000; 
+            --progress-bg-solid: #2D3A75; --progress-fill: #1B2450;
         }
 
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Pretendard', sans-serif;
-            background-color: var(--hb-blue);
-            color: var(--white);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
+        body { background-color: var(--window-bg); margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; font-family: 'Noto Sans KR', sans-serif; -webkit-font-smoothing: antialiased; }
+        
+        #main-container { 
+            width: 100%; max-width: 1200px; height: 100vh; background-color: var(--main-bg); 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            padding: 40px; box-sizing: border-box; position: relative; overflow: hidden; 
         }
 
-        .impact {
-            font-family: 'Impact', 'Helvetica Bold', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: -0.02em;
+        #main-container::before { 
+            content: ""; position: absolute; top: 50%; right: -300px; transform: translateY(-50%); 
+            width: 900px; height: 900px; background-image: url('logo2.png'); background-size: contain; 
+            background-repeat: no-repeat; background-position: center; filter: brightness(0); opacity: 0.2; z-index: 0; pointer-events: none; 
         }
 
-        #app {
-            width: 100%;
-            max-width: 480px;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            padding: 40px 24px;
-            box-sizing: border-box;
-            position: relative;
+        .inner-content { width: 100%; max-width: 550px; position: relative; z-index: 10; }
+        .page { display: none; }
+        .page.active { display: block; text-align: center; }
+
+        .main-logo { width: 100%; max-width: 380px; height: auto; margin-bottom: 25px; filter: brightness(0); opacity: 1.0; }
+        .sub-logo { width: 100%; height: auto; margin-bottom: 20px; filter: brightness(0); display: block; }
+
+        h2 { font-weight: 900; font-size: 1.6rem; text-align: left; margin-bottom: 30px; letter-spacing: -0.02em; padding: 0 10px; }
+
+        .progress-container { width: 100%; margin-bottom: 30px; }
+        .progress-info { display: flex; justify-content: space-between; font-weight: 900; font-size: 0.9rem; margin-bottom: 8px; }
+        .main-progress-bg { width: 100%; height: 12px; background-color: var(--progress-bg-solid); border-radius: 6px; overflow: hidden; }
+        .main-progress-fill { height: 100%; background-color: var(--progress-fill); transition: width 0.5s ease; }
+
+        .opt-btn { 
+            width: 100%; position: relative; background: transparent; border: 3px solid var(--text-black); 
+            padding: 20px; margin-bottom: 15px; font-size: 1.1rem; cursor: pointer; 
+            display: flex; justify-content: space-between; align-items: center; z-index: 20; 
+            overflow: hidden; font-family: 'Noto Sans KR', sans-serif; 
+            color: var(--text-black); font-weight: 900; 
+            border-radius: 6px; 
+        }
+        .opt-btn:disabled { cursor: default; opacity: 0.8; }
+        .btn-fill { position: absolute; top: 0; left: 0; bottom: 0; width: 0%; background-color: var(--bar-bg); z-index: -1; transition: width 0.6s ease; }
+        .stat-text { font-weight: 900; font-size: 1rem; pointer-events: none; }
+
+        .start-p { font-weight: 900; font-size: 1.2rem; margin-bottom: 10px; color: var(--text-black); }
+        .main-btn { margin-top: 25px; padding: 15px 45px; background: var(--btn-dark-navy); color: #fff; border: none; font-size: 1.2rem; font-weight: 900; cursor: pointer; letter-spacing: 0.1em; border-radius: 6px; }
+
+        /* [수정] 결과 화면 상단 TYPE 텍스트 두께 상향 */
+        .result-category { 
+            font-weight: 900; /* 400에서 900으로 변경 */
+            font-size: 0.9rem; 
+            letter-spacing: 0.2em; 
+            color: rgba(0,0,0,0.7); 
+            display: block; 
         }
 
-        /* Screen Styles */
-        .screen {
-            display: none;
-            flex-direction: column;
-            height: 100%;
-        }
+        .result-name { font-weight: 900; font-size: 3.8rem; line-height: 1; margin: 5px 0; letter-spacing: -0.03em; }
+        .character-img { width: 220px; height: 220px; margin: 20px auto; background-size: contain; background-repeat: no-repeat; background-position: center; display: flex; align-items: center; justify-content: center; font-size: 80px; }
+        #result-tag { font-weight: 900; font-size: 1.2rem; color: var(--text-black); border-bottom: 4px solid var(--text-black); display: inline-block; margin-top: 10px; padding-bottom: 5px; }
 
-        .screen.active {
-            display: flex;
-        }
-
-        /* Intro Screen */
-        .intro-header {
-            font-size: 14px;
-            margin-bottom: 20px;
-            opacity: 0.8;
-        }
-
-        .intro-title {
-            font-size: 80px;
-            line-height: 0.9;
-            margin: 40px 0;
-        }
-
-        .intro-desc {
-            font-size: 18px;
-            margin-bottom: auto;
-        }
-
-        /* Question Screen */
-        .q-progress {
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-
-        .q-bar {
-            height: 4px;
-            background: rgba(255, 255, 255, 0.2);
-            margin-bottom: 40px;
-        }
-
-        .q-bar-fill {
-            height: 100%;
-            background: var(--white);
-            transition: width 0.3s ease;
-        }
-
-        .q-title {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 40px;
-            word-break: keep-all;
-        }
-
-        .btn-option {
-            background: var(--white);
-            color: var(--hb-blue);
-            border: none;
-            padding: 20px;
-            margin-bottom: 12px;
-            font-size: 16px;
-            font-weight: 700;
-            text-align: left;
-            cursor: pointer;
-            transition: transform 0.1s;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .btn-option:active {
-            transform: scale(0.98);
-        }
-
-        /* Result Screen */
-        .result-type {
-            font-size: 64px;
-            margin-bottom: 10px;
-        }
-
-        .result-desc {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 20px;
-        }
-
-        .result-card {
-            background: var(--white);
-            color: var(--hb-blue);
-            padding: 30px;
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .result-card::after {
-            content: '★';
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            font-size: 40px;
-            opacity: 0.2;
-        }
-
-        /* Stats */
-        .stats-container {
-            margin-top: auto;
-            padding: 20px;
-            background: var(--hb-dark);
-        }
-
-        .stat-row {
-            margin-bottom: 15px;
-        }
-
-        .stat-label {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            margin-bottom: 5px;
-        }
-
-        .stat-bar-bg {
-            height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .stat-bar-fill {
-            height: 100%;
-            background: var(--white);
-        }
-
-        /* Global Button */
-        .btn-main {
-            background: var(--white);
-            color: var(--hb-blue);
-            border: none;
-            padding: 24px;
-            font-size: 20px;
-            font-weight: 700;
-            cursor: pointer;
-            text-align: center;
-        }
+        .total-stats { margin-top: 30px; padding: 20px; background: rgb(220, 220, 220); border-radius: 10px; text-align: left; position: relative; z-index: 20; }
+        .stat-title { font-weight: 900; font-size: 0.95rem; margin-bottom: 12px; display: block; border-bottom: 2px solid #000; padding-bottom: 5px; }
+        .stat-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 0.85rem; font-weight: 900; }
+        .stat-bar-bg { flex-grow: 1; height: 8px; background: rgba(0,0,0,0.15); margin: 0 15px; }
+        .stat-bar-fill { height: 100%; background: #000; width: 0%; transition: width 1s ease; }
     </style>
 </head>
 <body>
 
-<div id="app">
-    <!-- Intro Screen -->
-    <div id="intro" class="screen active">
-        <div class="intro-header impact">HYPE BEAST : CONSUMPTION TEST</div>
-        <h1 class="intro-title impact">HYPE<br>BEAST</h1>
-        <p class="intro-desc">나의 소비 스타일을 선택하기</p>
-        <button class="btn-main impact" onclick="startTest()">START</button>
-    </div>
+    <div id="main-container">
+        <div class="inner-content">
+            <div id="page-start" class="page active">
+                <img src="logo.png" alt="Logo" class="main-logo">
+                <p class="start-p">나의 유행 소비 스타일 찾기</p>
+                <button class="main-btn" onclick="nextPage('q1')">시작하기</button>
+            </div>
 
-    <!-- Question Screen -->
-    <div id="question" class="screen">
-        <div id="q-progress-text" class="q-progress impact">01 / 03</div>
-        <div class="q-bar"><div id="q-bar-fill" class="q-bar-fill" style="width: 33%"></div></div>
-        <h2 id="q-title" class="q-title">...</h2>
-        <div id="options" style="display: flex; flex-direction: column;"></div>
-    </div>
+            <div id="page-q1" class="page">
+                <img src="logo3.png" alt="sub-logo" class="sub-logo">
+                <div class="progress-container">
+                    <div class="progress-info"><span>Q 1 / 4</span><span>25%</span></div>
+                    <div class="main-progress-bg"><div class="main-progress-fill" style="width: 25%;"></div></div>
+                </div>
+                <h2>Q1. 사고 싶은 게 출시되면 나는..</h2>
+                <button class="opt-btn" onclick="handleSelect('q1', 'a')"><span>A. 바로 선점하는 게 좋다</span><div class="btn-fill" id="bar-q1-a"></div><span class="stat-text" id="text-q1-a"></span></button>
+                <button class="opt-btn" onclick="handleSelect('q1', 'b')"><span>B. 혼자 고민을 깊게 한다</span><div class="btn-fill" id="bar-q1-b"></div><span class="stat-text" id="text-q1-b"></span></button>
+                <button class="opt-btn" onclick="handleSelect('q1', 'c')"><span>C. 반응을 보고 결정한다</span><div class="btn-fill" id="bar-q1-c"></div><span class="stat-text" id="text-q1-c"></span></button>
+            </div>
 
-    <!-- Result Screen -->
-    <div id="result" class="screen">
-        <div class="impact" style="font-size: 14px; margin-bottom: 10px;">YOUR TYPE IS</div>
-        <h1 id="result-type" class="result-type impact">FAST</h1>
-        <div id="result-desc" class="result-desc">유행 반응형 소비자</div>
-        
-        <div class="result-card">
-            <p id="result-punchline" style="font-weight: 700; font-size: 18px; margin-bottom: 10px;"></p>
-            <p id="result-summary" style="font-size: 14px; line-height: 1.6; opacity: 0.8;"></p>
+            <div id="page-q2" class="page">
+                <img src="logo3.png" alt="sub-logo" class="sub-logo">
+                <div class="progress-container">
+                    <div class="progress-info"><span>Q 2 / 4</span><span>50%</span></div>
+                    <div class="main-progress-bg"><div class="main-progress-fill" style="width: 50%;"></div></div>
+                </div>
+                <h2>Q2. 스타일을 선택할 때..</h2>
+                <button class="opt-btn" onclick="handleSelect('q2', 'a')"><span>A. 최신 트렌드를 따른다</span><div class="btn-fill" id="bar-q2-a"></div><span class="stat-text" id="text-q2-a"></span></button>
+                <button class="opt-btn" onclick="handleSelect('q2', 'b')"><span>B. 나만의 기준을 따른다</span><div class="btn-fill" id="bar-q2-b"></div><span class="stat-text" id="text-q2-b"></span></button>
+                <button class="opt-btn" onclick="handleSelect('q2', 'c')"><span>C. 집단의 스타일을 따른다</span><div class="btn-fill" id="bar-q2-c"></div><span class="stat-text" id="text-q2-c"></span></button>
+            </div>
+
+            <div id="page-q3" class="page">
+                <img src="logo3.png" alt="sub-logo" class="sub-logo">
+                <div class="progress-container">
+                    <div class="progress-info"><span>Q 3 / 4</span><span>75%</span></div>
+                    <div class="main-progress-bg"><div class="main-progress-fill" style="width: 75%;"></div></div>
+                </div>
+                <h2>Q3. 나에게 더 중요한 것은..</h2>
+                <button class="opt-btn" onclick="handleSelect('q3', 'a')"><span>A. 빠름과 새로움</span><div class="btn-fill" id="bar-q3-a"></div><span class="stat-text" id="text-q3-a"></span></button>
+                <button class="opt-btn" onclick="handleSelect('q3', 'b')"><span>B. 취향과 기준</span><div class="btn-fill" id="bar-q3-b"></div><span class="stat-text" id="text-q3-b"></span></button>
+                <button class="opt-btn" onclick="handleSelect('q3', 'c')"><span>C. 소속감과 관계</span><div class="btn-fill" id="bar-q3-c"></div><span class="stat-text" id="text-q3-c"></span></button>
+            </div>
+
+            <div id="page-q4" class="page">
+                <img src="logo3.png" alt="sub-logo" class="sub-logo">
+                <div class="progress-container">
+                    <div class="progress-info"><span>Q 4 / 4</span><span>100%</span></div>
+                    <div class="main-progress-bg"><div class="main-progress-fill" style="width: 100%;"></div></div>
+                </div>
+                <h2>Q4. 새로 산 아이템을 장착한 날, 나는..</h2>
+                <button class="opt-btn" onclick="handleSelect('q4', 'a')"><span>A. 이미 다음 트렌드를 찾아보고 있다</span><div class="btn-fill" id="bar-q4-a"></div><span class="stat-text" id="text-q4-a"></span></button>
+                <button class="opt-btn" onclick="handleSelect('q4', 'b')"><span>B. 남의 시선보다 내 만족에 집중한다</span><div class="btn-fill" id="bar-q4-b"></div><span class="stat-text" id="text-q4-b"></span></button>
+                <button class="opt-btn" onclick="handleSelect('q4', 'c')"><span>C. SNS나 커뮤니티의 반응을 확인한다</span><div class="btn-fill" id="bar-q4-c"></div><span class="stat-text" id="text-q4-c"></span></button>
+            </div>
+
+            <div id="page-result" class="page">
+                <div class="result-header">
+                    <span class="result-category">TYPE</span>
+                    <h1 id="result-name" class="result-name">NAME</h1>
+                </div>
+                <div class="character-img" id="char-img"></div>
+                <div id="result-tag"></div>
+                
+                <div class="total-stats">
+                    <span class="stat-title" id="total-count-text">현재 0명이 참여했습니다</span>
+                    <div class="stat-row"><span>MAX</span><div class="stat-bar-bg"><div id="bar-total-a" class="stat-bar-fill"></div></div><span id="percent-total-a">0%</span></div>
+                    <div class="stat-row"><span>HUGO</span><div class="stat-bar-bg"><div id="bar-total-b" class="stat-bar-fill"></div></div><span id="percent-total-b">0%</span></div>
+                    <div class="stat-row"><span>KRU</span><div class="stat-bar-bg"><div id="bar-total-c" class="stat-bar-fill"></div></div><span id="percent-total-c">0%</span></div>
+                </div>
+                <button class="main-btn" onclick="location.reload()">다시하기</button>
+            </div>
         </div>
-
-        <div class="stats-container">
-            <div id="total-users" class="impact" style="margin-bottom: 15px; font-size: 14px;">TOTAL USERS: --</div>
-            <div id="stats-bars"></div>
-        </div>
-        
-        <p style="font-size: 12px; margin: 20px 0; opacity: 0.7; text-align: center;">ID 카드를 선택하고 전시 스탭에게 보여주세요.</p>
-        <button class="btn-main impact" onclick="location.reload()">RETAKE TEST</button>
     </div>
-</div>
 
-<script>
-    const questions = [
-        {
-            title: "한정판 제품이 출시됐다.",
-            options: [
-                { text: "바로 선점하는 게 좋다", type: "A" },
-                { text: "고민 후 선택한다", type: "B" },
-                { text: "반응을 보고 결정한다", type: "C" }
-            ]
-        },
-        {
-            title: "스타일을 선택할 때",
-            options: [
-                { text: "트렌드를 따른다", type: "A" },
-                { text: "나만의 기준을 믿는 편이다", type: "B" },
-                { text: "집단의 흐름을 따른다", type: "C" }
-            ]
-        },
-        {
-            title: "소비를 결정할 때",
-            options: [
-                { text: "빠른 반응이 중요하다", type: "A" },
-                { text: "기준과 취향이 중요하다", type: "B" },
-                { text: "소속과 관계가 중요하다", type: "C" }
-            ]
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, doc, updateDoc, increment, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDdSXJJ2grh1GNA_vusNJRm9djRpRH1ggo",
+            authDomain: "hype-4bb91.firebaseapp.com",
+            projectId: "hype-4bb91",
+            storageBucket: "hype-4bb91.firebasestorage.app",
+            messagingSenderId: "165143291283",
+            appId: "1:165143291283:web:000e48b6091aa0a1c5b466",
+            measurementId: "G-0Q8QJ5YDP4"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        let userAnswers = { a: 0, b: 0, c: 0 };
+        let isProcessing = false;
+
+        window.nextPage = function(pId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page-' + pId).classList.add('active');
+            isProcessing = false;
+        };
+
+        window.handleSelect = async function(qId, optId) {
+            if (isProcessing) return;
+            isProcessing = true;
+
+            const currentButtons = document.querySelectorAll(`#page-${qId} .opt-btn`);
+            currentButtons.forEach(btn => btn.disabled = true);
+
+            userAnswers[optId]++;
+            const statsRef = doc(db, "surveyStats", qId);
+
+            try {
+                await updateDoc(statsRef, { [optId.toUpperCase()]: increment(1) });
+                const snap = await getDoc(statsRef);
+                if (snap.exists()) {
+                    const data = snap.data();
+                    const total = (data.A||0)+(data.B||0)+(data.C||0);
+                    ['a','b','c'].forEach(o => {
+                        const count = data[o.toUpperCase()] || 0;
+                        const p = total > 0 ? Math.round((count/total)*100) : 0;
+                        const fillBar = document.getElementById(`bar-${qId}-${o}`);
+                        if(fillBar) fillBar.style.width = p + "%";
+                        const textSpan = document.getElementById(`text-${qId}-${o}`);
+                        if(textSpan) textSpan.innerText = p + "%";
+                    });
+                }
+
+                setTimeout(() => {
+                    if (qId === 'q1') nextPage('q2');
+                    else if (qId === 'q2') nextPage('q3');
+                    else if (qId === 'q3') nextPage('q4');
+                    else if (qId === 'q4') calculateResult();
+                }, 1000);
+
+            } catch (e) {
+                console.error(e);
+                isProcessing = false;
+                currentButtons.forEach(btn => btn.disabled = false);
+            }
+        };
+
+        async function calculateResult() {
+            nextPage('result');
+            const { a, b, c } = userAnswers;
+            const nameEl = document.getElementById('result-name');
+            const tagEl = document.getElementById('result-tag');
+            const imgEl = document.getElementById('char-img');
+
+            if (a >= b && a >= c) { 
+                nameEl.innerText = "MAX"; imgEl.innerText = "🐺"; tagEl.innerText = "유행의 선점"; 
+            } else if (b >= a && b >= c) { 
+                nameEl.innerText = "HUGO"; imgEl.innerText = "🦍"; tagEl.innerText = "취향의 독립"; 
+            } else { 
+                nameEl.innerText = "KRU"; imgEl.innerText = "🐆"; tagEl.innerText = "공감과 소속"; 
+            }
+
+            const q1Snap = await getDoc(doc(db, "surveyStats", "q1"));
+            if (q1Snap.exists()) {
+                const d = q1Snap.data();
+                const total = (d.A||0)+(d.B||0)+(d.C||0);
+                document.getElementById('total-count-text').innerText = `현재 ${total}명이 참여했습니다`;
+                ['A','B','C'].forEach(id => {
+                    const count = d[id] || 0;
+                    const p = total > 0 ? Math.round((count/total)*100) : 0;
+                    document.getElementById(`bar-total-${id.toLowerCase()}`).style.width = p+"%";
+                    document.getElementById(`percent-total-${id.toLowerCase()}`).innerText = p+"%";
+                });
+            }
         }
-    ];
-
-    const resultsData = {
-        A: { name: "FAST (MAX)", desc: "유행 반응형 소비자", punch: "“유행이 뜨면 이미 늦었다”", summary: "트렌드에 가장 민감하게 반응하며, 변화를 즐기는 타입입니다." },
-        B: { name: "OWN (HUGO)", desc: "자기 기준 중심형 소비자", punch: "“나만의 기준”", summary: "외부의 시선보다 본인의 확고한 취향과 기준을 우선시합니다." },
-        C: { name: "CREW (KRU)", desc: "집단 기반형 소비자", punch: "“우리는 함께 간다”", summary: "소속된 집단의 정체성과 유대감을 바탕으로 소비를 결정합니다." }
-    };
-
-    let currentStep = 0;
-    let answers = [];
-
-    // 실시간 집계 시뮬레이션 (LocalStorage 활용)
-    function updateStats(type) {
-        let stats = JSON.parse(localStorage.getItem('hb_stats')) || { A: 52, B: 34, C: 42, total: 128 };
-        stats[type]++;
-        stats.total++;
-        localStorage.setItem('hb_stats', JSON.stringify(stats));
-        return stats;
-    }
-
-    function startTest() {
-        document.getElementById('intro').classList.remove('active');
-        document.getElementById('question').classList.add('active');
-        showQuestion();
-    }
-
-    function showQuestion() {
-        const q = questions[currentStep];
-        document.getElementById('q-progress-text').innerText = `0${currentStep + 1} / 03`;
-        document.getElementById('q-bar-fill').style.width = `${((currentStep + 1) / 3) * 100}%`;
-        document.getElementById('q-title').innerText = q.title;
-        
-        const optionsDiv = document.getElementById('options');
-        optionsDiv.innerHTML = '';
-        q.options.forEach(opt => {
-            const btn = document.createElement('button');
-            btn.className = 'btn-option';
-            btn.innerHTML = `<span>${opt.text}</span> <span class="impact" style="opacity:0.3">>></span>`;
-            btn.onclick = () => selectOption(opt.type);
-            optionsDiv.appendChild(btn);
-        });
-    }
-
-    function selectOption(type) {
-        answers.push(type);
-        if (currentStep < 2) {
-            currentStep++;
-            showQuestion();
-        } else {
-            showResult();
-        }
-    }
-
-    function showResult() {
-        const counts = answers.reduce((acc, cur) => { acc[cur] = (acc[cur] || 0) + 1; return acc; }, {});
-        const resultType = Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b);
-        const data = resultsData[resultType];
-
-        document.getElementById('question').classList.remove('active');
-        document.getElementById('result').classList.add('active');
-
-        document.getElementById('result-type').innerText = data.name;
-        document.getElementById('result-desc').innerText = data.desc;
-        document.getElementById('result-punchline').innerText = data.punch;
-        document.getElementById('result-summary').innerText = data.summary;
-
-        const stats = updateStats(resultType);
-        document.getElementById('total-users').innerText = `TOTAL USERS: ${stats.total}`;
-        
-        const statsBars = document.getElementById('stats-bars');
-        statsBars.innerHTML = '';
-        ['A', 'B', 'C'].forEach(t => {
-            const perc = Math.round((stats[t] / stats.total) * 100);
-            const label = t === 'A' ? 'FAST' : t === 'B' ? 'OWN' : 'CREW';
-            statsBars.innerHTML += `
-                <div class="stat-row">
-                    <div class="stat-label impact"><span>${label}</span><span>${perc}%</span></div>
-                    <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: ${perc}%"></div></div>
-                </div>`;
-        });
-    }
-</script>
+    </script>
 </body>
 </html>
