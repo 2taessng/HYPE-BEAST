@@ -18,65 +18,58 @@
         body { background-color: var(--window-bg); margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; font-family: 'Noto Sans KR', sans-serif; -webkit-font-smoothing: antialiased; }
         
         #main-container { 
-            width: 100%; max-width: 1200px; height: 100vh; background-color: var(--main-bg); 
+            width: 100vw; /* 가로폭 전체 사용 */
+            height: 100vh; background-color: var(--main-bg); 
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            padding: 40px; box-sizing: border-box; position: relative; overflow: hidden; 
+            padding: 20px; box-sizing: border-box; position: relative; overflow: hidden; 
         }
 
-        /* 배경 로고 (비율 및 위치 그대로 유지) */
+        /* 배경 로고 logo2 (위치/비율 유지) */
         #main-container::before { 
             content: ""; position: absolute; top: 50%; right: -300px; transform: translateY(-50%); 
             width: 900px; height: 900px; background-image: url('logo2.png'); background-size: contain; 
             background-repeat: no-repeat; background-position: center; filter: brightness(0); opacity: 0.2; z-index: 0; pointer-events: none; 
         }
 
-        /* [수정] 콘텐츠 폭 확대 (550px -> 720px) */
-        .inner-content { width: 100%; max-width: 720px; position: relative; z-index: 10; }
+        /* 콘텐츠 영역 다시 컴팩트하게 조정 */
+        .inner-content { width: 100%; max-width: 550px; position: relative; z-index: 10; }
         .page { display: none; }
         .page.active { display: block; text-align: center; }
 
-        /* [수정] 메인 로고 크기 확대 */
-        .main-logo { width: 100%; max-width: 480px; height: auto; margin-bottom: 35px; filter: brightness(0); opacity: 1.0; }
-        
-        /* [수정] Sub 로고 (logo3) 크기 확대 */
-        .sub-logo { width: 100%; height: auto; margin-bottom: 25px; filter: brightness(0); display: block; }
+        .main-logo { width: 100%; max-width: 380px; height: auto; margin-bottom: 25px; filter: brightness(0); opacity: 1.0; }
+        .sub-logo { width: 100%; height: auto; margin-bottom: 20px; filter: brightness(0); display: block; }
 
-        /* [수정] 질문 제목 크기 확대 (1.6rem -> 2.0rem) */
-        h2 { font-weight: 900; font-size: 2.0rem; text-align: left; margin-bottom: 40px; letter-spacing: -0.02em; padding: 0 10px; }
+        h2 { font-weight: 900; font-size: 1.6rem; text-align: left; margin-bottom: 30px; letter-spacing: -0.02em; padding: 0 10px; }
 
-        .progress-container { width: 100%; margin-bottom: 40px; }
-        .progress-info { display: flex; justify-content: space-between; font-weight: 900; font-size: 1.1rem; margin-bottom: 10px; }
-        .main-progress-bg { width: 100%; height: 15px; background-color: var(--progress-bg-solid); border-radius: 8px; overflow: hidden; }
+        .progress-container { width: 100%; margin-bottom: 30px; }
+        .progress-info { display: flex; justify-content: space-between; font-weight: 900; font-size: 0.9rem; margin-bottom: 8px; }
+        .main-progress-bg { width: 100%; height: 12px; background-color: var(--progress-bg-solid); border-radius: 6px; overflow: hidden; }
         .main-progress-fill { height: 100%; background-color: var(--progress-fill); transition: width 0.5s ease; }
 
-        /* [수정] 선택지 버튼 전체 확대 */
         .opt-btn { 
-            width: 100%; position: relative; background: transparent; border: 4px solid var(--text-black); /* 테두리 조금 더 두껍게 */
-            padding: 25px; margin-bottom: 20px; font-size: 1.4rem; cursor: pointer; /* 폰트 및 패딩 확대 */
+            width: 100%; position: relative; background: transparent; border: 3px solid var(--text-black); 
+            padding: 20px; margin-bottom: 15px; font-size: 1.1rem; cursor: pointer; 
             display: flex; justify-content: space-between; align-items: center; z-index: 20; 
             overflow: hidden; font-family: 'Noto Sans KR', sans-serif; 
             color: var(--text-black); font-weight: 900; 
-            border-radius: 8px; 
+            border-radius: 6px; 
         }
         .opt-btn:disabled { cursor: default; opacity: 0.8; }
         .btn-fill { position: absolute; top: 0; left: 0; bottom: 0; width: 0%; background-color: var(--bar-bg); z-index: -1; transition: width 0.6s ease; }
-        .stat-text { font-weight: 900; font-size: 1.2rem; pointer-events: none; }
+        .stat-text { font-weight: 900; font-size: 1rem; pointer-events: none; }
 
-        /* [수정] 안내 문구 및 메인 버튼 확대 */
-        .start-p { font-weight: 900; font-size: 1.6rem; margin-bottom: 15px; color: var(--text-black); }
-        .main-btn { margin-top: 35px; padding: 20px 60px; background: var(--btn-dark-navy); color: #fff; border: none; font-size: 1.5rem; font-weight: 900; cursor: pointer; letter-spacing: 0.1em; border-radius: 8px; }
+        .start-p { font-weight: 900; font-size: 1.2rem; margin-bottom: 10px; color: var(--text-black); }
+        .main-btn { margin-top: 25px; padding: 15px 45px; background: var(--btn-dark-navy); color: #fff; border: none; font-size: 1.2rem; font-weight: 900; cursor: pointer; letter-spacing: 0.1em; border-radius: 6px; }
 
-        /* [수정] 결과 화면 폰트 크기 전체 확대 */
-        .result-category { font-weight: 900; font-size: 1.1rem; letter-spacing: 0.2em; color: rgba(0,0,0,0.7); display: block; }
-        .result-name { font-weight: 900; font-size: 5.0rem; line-height: 1; margin: 10px 0; letter-spacing: -0.03em; }
-        .character-img { width: 280px; height: 280px; margin: 25px auto; background-size: contain; background-repeat: no-repeat; background-position: center; display: flex; align-items: center; justify-content: center; font-size: 110px; }
-        #result-tag { font-weight: 900; font-size: 1.6rem; color: var(--text-black); border-bottom: 5px solid var(--text-black); display: inline-block; margin-top: 15px; padding-bottom: 8px; }
+        .result-category { font-weight: 900; font-size: 0.9rem; letter-spacing: 0.2em; color: rgba(0,0,0,0.7); display: block; }
+        .result-name { font-weight: 900; font-size: 3.8rem; line-height: 1; margin: 5px 0; letter-spacing: -0.03em; }
+        .character-img { width: 220px; height: 220px; margin: 20px auto; background-size: contain; background-repeat: no-repeat; background-position: center; display: flex; align-items: center; justify-content: center; font-size: 80px; }
+        #result-tag { font-weight: 900; font-size: 1.2rem; color: var(--text-black); border-bottom: 4px solid var(--text-black); display: inline-block; margin-top: 10px; padding-bottom: 5px; }
 
-        /* [수정] 통계 블럭 확대 */
-        .total-stats { margin-top: 40px; padding: 25px; background: rgb(220, 220, 220); border-radius: 12px; text-align: left; position: relative; z-index: 20; }
-        .stat-title { font-weight: 900; font-size: 1.2rem; margin-bottom: 15px; display: block; border-bottom: 3px solid #000; padding-bottom: 8px; }
-        .stat-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 1.0rem; font-weight: 900; }
-        .stat-bar-bg { flex-grow: 1; height: 10px; background: rgba(0,0,0,0.15); margin: 0 20px; }
+        .total-stats { margin-top: 30px; padding: 20px; background: rgb(220, 220, 220); border-radius: 10px; text-align: left; position: relative; z-index: 20; }
+        .stat-title { font-weight: 900; font-size: 0.95rem; margin-bottom: 12px; display: block; border-bottom: 2px solid #000; padding-bottom: 5px; }
+        .stat-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 0.85rem; font-weight: 900; }
+        .stat-bar-bg { flex-grow: 1; height: 8px; background: rgba(0,0,0,0.15); margin: 0 15px; }
         .stat-bar-fill { height: 100%; background: #000; width: 0%; transition: width 1s ease; }
     </style>
 </head>
@@ -188,33 +181,23 @@
             userAnswers = { a: 0, b: 0, c: 0 };
             answerHistory = [];
             isProcessing = false;
-
             const allButtons = document.querySelectorAll('.opt-btn');
-            allButtons.forEach(btn => {
-                btn.disabled = false;
-            });
-
+            allButtons.forEach(btn => btn.disabled = false);
             const allFills = document.querySelectorAll('.btn-fill');
             allFills.forEach(fill => fill.style.width = "0%");
-
             const allStatTexts = document.querySelectorAll('.stat-text');
             allStatTexts.forEach(txt => txt.innerText = "");
-
             nextPage('start');
         };
 
         window.handleSelect = async function(qId, optId) {
             if (isProcessing) return;
             isProcessing = true;
-
             const currentButtons = document.querySelectorAll(`#page-${qId} .opt-btn`);
             currentButtons.forEach(btn => btn.disabled = true);
-
             userAnswers[optId]++;
             answerHistory.push(optId);
-
             const statsRef = doc(db, "surveyStats", qId);
-
             try {
                 await updateDoc(statsRef, { [optId.toUpperCase()]: increment(1) });
                 const snap = await getDoc(statsRef);
@@ -230,14 +213,12 @@
                         if(textSpan) textSpan.innerText = p + "%";
                     });
                 }
-
                 setTimeout(() => {
                     if (qId === 'q1') nextPage('q2');
                     else if (qId === 'q2') nextPage('q3');
                     else if (qId === 'q3') nextPage('q4');
                     else if (qId === 'q4') calculateResult();
                 }, 1000);
-
             } catch (e) {
                 console.error(e);
                 isProcessing = false;
@@ -251,28 +232,17 @@
             const nameEl = document.getElementById('result-name');
             const tagEl = document.getElementById('result-tag');
             const imgEl = document.getElementById('char-img');
-
             let finalType = "";
             const maxVal = Math.max(a, b, c);
             const candidates = [];
             if (a === maxVal) candidates.push('a');
             if (b === maxVal) candidates.push('b');
             if (c === maxVal) candidates.push('c');
-
-            if (candidates.length === 1) {
-                finalType = candidates[0];
-            } else {
-                finalType = answerHistory.find(ans => candidates.includes(ans));
-            }
-
-            if (finalType === 'a') { 
-                nameEl.innerText = "MAX"; imgEl.innerText = "🐺"; tagEl.innerText = "유행의 선점"; 
-            } else if (finalType === 'b') { 
-                nameEl.innerText = "HUGO"; imgEl.innerText = "🦍"; tagEl.innerText = "취향의 독립"; 
-            } else { 
-                nameEl.innerText = "KRU"; imgEl.innerText = "🐆"; tagEl.innerText = "공감과 소속"; 
-            }
-
+            if (candidates.length === 1) finalType = candidates[0];
+            else finalType = answerHistory.find(ans => candidates.includes(ans));
+            if (finalType === 'a') { nameEl.innerText = "MAX"; imgEl.innerText = "🐺"; tagEl.innerText = "유행의 선점"; }
+            else if (finalType === 'b') { nameEl.innerText = "HUGO"; imgEl.innerText = "🦍"; tagEl.innerText = "취향의 독립"; }
+            else { nameEl.innerText = "KRU"; imgEl.innerText = "🐆"; tagEl.innerText = "공감과 소속"; }
             const q1Snap = await getDoc(doc(db, "surveyStats", "q1"));
             if (q1Snap.exists()) {
                 const d = q1Snap.data();
