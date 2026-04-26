@@ -44,7 +44,7 @@
 
         #page-result.active { overflow-y: auto; justify-content: center; padding: 20px 10px; }
         
-        /* 방명록 페이지: 상하단 고정 레이아웃 */
+        /* 방명록 페이지 레이아웃 고정 */
         #page-guestbook.active { display: flex; flex-direction: column; justify-content: flex-start; overflow: hidden; height: 100%; }
         
         .page::-webkit-scrollbar { width: 4px; }
@@ -52,18 +52,19 @@
 
         .result-wrapper { width: 100%; margin: auto 0; display: flex; flex-direction: column; align-items: center; }
 
-        /* [요청 조건 1] 상단 입력부 - 화면 중앙 높이에 위치 및 고정 */
+        /* [고정 조건 1] 상단 입력부 - 화면 중앙 높이 유지 및 하단 여백 최소화 */
         .gb-fixed-header {
             width: 100%;
-            height: 50vh; /* 페이지 딱 켰을 때 중앙에 오도록 높이 설정 */
+            height: 50vh; 
             display: flex;
             flex-direction: column;
             justify-content: center;
             flex-shrink: 0;
             z-index: 100;
+            margin-bottom: -15px; /* 댓글 리스트와의 간격을 줄이기 위해 음수 마진 활용 */
         }
 
-        /* [요청 조건 2] 중앙 댓글부 - 스크롤 발생 */
+        /* [고정 조건 2] 중앙 스크롤 영역 */
         .gb-scroll-area {
             flex-grow: 1;
             overflow-y: auto;
@@ -74,15 +75,15 @@
         .gb-scroll-area::-webkit-scrollbar { width: 4px; }
         .gb-scroll-area::-webkit-scrollbar-thumb { background: var(--text-black); border-radius: 10px; }
 
-        /* [요청 조건 3] 하단 페이지네이션 - 최하단 고정 */
+        /* [고정 조건 3] 하단 페이지네이션 고정 */
         .gb-fixed-footer {
             width: 100%;
             flex-shrink: 0;
-            padding: 15px 0 30px 0;
+            padding: 10px 0 25px 0;
             z-index: 100;
         }
 
-        /* 공통 버튼 및 텍스트 스타일 */
+        /* UI 요소 스타일 */
         .main-logo { width: 100%; max-width: 350px; height: auto; margin-bottom: 25px; filter: brightness(0); opacity: 1.0; }
         .sub-logo { width: 100%; height: auto; margin-bottom: 20px; filter: brightness(0); display: block; }
         h2 { font-weight: 900; font-size: 1.6rem; text-align: left; margin-bottom: 30px; letter-spacing: -0.02em; padding: 0 10px; width: 100%; }
