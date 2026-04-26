@@ -64,6 +64,7 @@
         #result-desc { font-weight: 700; font-size: 0.95rem; color: var(--text-black); display: block; line-height: 1.4; opacity: 0.9; }
 
         .total-stats { margin: 30px 0 15px 0; padding: 20px; background: rgb(220, 220, 220); border-radius: 10px; text-align: left; width: 100%; box-sizing: border-box; }
+        .stat-header { font-weight: 900; font-size: 1.1rem; display: block; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 15px; }
         .stat-row { display: flex; align-items: center; margin-bottom: 10px; font-size: 0.9rem; font-weight: 900; }
         .stat-name { width: 60px; flex-shrink: 0; } 
         .stat-bar-bg { flex-grow: 1; height: 9px; background: rgba(0,0,0,0.15); margin: 0 12px; border-radius: 5px; overflow: hidden; }
@@ -157,6 +158,7 @@
                     <div id="result-desc">설명</div>
                 </div>
                 <div class="total-stats">
+                    <span class="stat-header" id="total-participation-text">현재 0명이 함께했습니다</span>
                     <div class="stat-row"><span class="stat-name">MAX</span><div class="stat-bar-bg"><div id="bar-total-a" class="stat-bar-fill"></div></div><span id="percent-total-a" class="stat-percent">0%</span></div>
                     <div class="stat-row"><span class="stat-name">HUGO</span><div class="stat-bar-bg"><div id="bar-total-b" class="stat-bar-fill"></div></div><span id="percent-total-b" class="stat-percent">0%</span></div>
                     <div class="stat-row"><span class="stat-name">KRU</span><div class="stat-bar-bg"><div id="bar-total-c" class="stat-bar-fill"></div></div><span id="percent-total-c" class="stat-percent">0%</span></div>
@@ -371,6 +373,7 @@
             if (q1Snap.exists()) {
                 const d = q1Snap.data();
                 const total = (d.A||0)+(d.B||0)+(d.C||0);
+                document.getElementById('total-participation-text').innerText = `현재 ${total}명이 함께했습니다`;
                 ['A','B','C'].forEach(id => {
                     const count = d[id] || 0;
                     const p = total > 0 ? Math.round((count/total)*100) : 0;
