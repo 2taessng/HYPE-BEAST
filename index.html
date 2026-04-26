@@ -63,22 +63,26 @@
         .result-category { font-weight: 900; font-size: 0.9rem; letter-spacing: 0.2em; color: rgba(0,0,0,0.7); display: block; }
         .result-name { font-weight: 900; font-size: 3.8rem; line-height: 1; margin: 5px 0; letter-spacing: -0.03em; }
         
-        /* [수정] 카드 이미지 스타일 */
         .card-img-wrap { width: 100%; max-width: 480px; margin: 20px auto; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3)); }
         .card-img { width: 100%; height: auto; border-radius: 12px; display: block; }
         
         #result-tag { font-weight: 900; font-size: 1.1rem; color: var(--text-black); border-bottom: 4px solid var(--text-black); display: inline-block; margin-top: 5px; padding-bottom: 5px; }
 
+        /* [수정] 통계 영역 레이아웃 정렬 */
         .total-stats { margin: 30px 0; padding: 20px; background: rgb(220, 220, 220); border-radius: 10px; text-align: left; }
-        .stat-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 0.85rem; font-weight: 900; }
-        .stat-bar-bg { flex-grow: 1; height: 8px; background: rgba(0,0,0,0.15); margin: 0 15px; }
+        .stat-row { display: flex; align-items: center; margin-bottom: 12px; font-size: 0.9rem; font-weight: 900; }
+        
+        /* 이름 길이에 상관없이 고정폭 부여 */
+        .stat-name { width: 60px; flex-shrink: 0; } 
+        .stat-bar-bg { flex-grow: 1; height: 10px; background: rgba(0,0,0,0.15); margin: 0 15px; border-radius: 5px; overflow: hidden; }
         .stat-bar-fill { height: 100%; background: #000; width: 0%; transition: width 1s ease; }
+        .stat-percent { width: 45px; text-align: right; flex-shrink: 0; }
 
         .gb-title { font-weight: 900; font-size: 2.2rem; margin-bottom: 30px; display: block; color: var(--text-black); text-align: left; padding-left: 5px; }
         .gb-input-box { display: flex; gap: 10px; margin-bottom: 15px; }
-        .gb-input { flex-grow: 1; padding: 15px; border: 3px solid var(--text-black); border-radius: 6px; font-family: inherit; font-weight: 700; font-size: 1rem; outline: none; background: rgba(255,255,255,0.1); color: var(--text-black); }
+        .gb-input { flex-grow: 1; padding: 15px; border: 3px solid var(--text-black); border-radius: 6px; font-family: inherit; font-weight: 900; font-size: 1rem; outline: none; background: rgba(255,255,255,0.1); color: var(--text-black); }
+        .gb-input::placeholder { color: rgba(0,0,0,0.6); font-weight: 700; } 
         .gb-submit { background: var(--text-black); color: white; border: none; padding: 0 25px; border-radius: 6px; font-weight: 900; cursor: pointer; font-size: 1rem; }
-        
         .gb-list { list-style: none; padding: 0; margin: 0; text-align: left; }
         .gb-item { background: transparent; padding: 18px; border: 3px solid var(--text-black); border-radius: 6px; margin-bottom: 12px; display: flex; align-items: center; }
         .gb-emoji { font-size: 1.6rem; margin-right: 12px; flex-shrink: 0; display: flex; align-items: center; }
@@ -157,10 +161,10 @@
                 <div id="result-tag"></div>
                 
                 <div class="total-stats">
-                    <span style="font-weight: 900; font-size: 0.95rem; display: block; border-bottom: 2px solid #000; padding-bottom: 5px; margin-bottom: 12px;" id="total-count-text">참여 통계</span>
-                    <div class="stat-row"><span>MAX</span><div class="stat-bar-bg"><div id="bar-total-a" class="stat-bar-fill"></div></div><span id="percent-total-a">0%</span></div>
-                    <div class="stat-row"><span>HUGO</span><div class="stat-bar-bg"><div id="bar-total-b" class="stat-bar-fill"></div></div><span id="percent-total-b">0%</span></div>
-                    <div class="stat-row"><span>KRU</span><div class="stat-bar-bg"><div id="bar-total-c" class="stat-bar-fill"></div></div><span id="percent-total-c">0%</span></div>
+                    <span style="font-weight: 900; font-size: 1.1rem; display: block; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 15px;" id="total-count-text">참여 통계</span>
+                    <div class="stat-row"><span class="stat-name">MAX</span><div class="stat-bar-bg"><div id="bar-total-a" class="stat-bar-fill"></div></div><span id="percent-total-a" class="stat-percent">0%</span></div>
+                    <div class="stat-row"><span class="stat-name">HUGO</span><div class="stat-bar-bg"><div id="bar-total-b" class="stat-bar-fill"></div></div><span id="percent-total-b" class="stat-percent">0%</span></div>
+                    <div class="stat-row"><span class="stat-name">KRU</span><div class="stat-bar-bg"><div id="bar-total-c" class="stat-bar-fill"></div></div><span id="percent-total-c" class="stat-percent">0%</span></div>
                 </div>
                 <button class="main-btn" onclick="nextPage('guestbook')">방명록 남기기</button>
             </div>
@@ -220,6 +224,7 @@
             const input = document.getElementById('gb-input-field');
             const msg = input.value.trim();
             if(!msg) return;
+            if (!confirm("방명록을 등록하시겠습니까?")) return;
             try {
                 await addDoc(collection(db, "guestbook"), {
                     emoji: currentResultEmoji,
@@ -241,14 +246,7 @@
                 const item = document.createElement('div');
                 item.className = 'gb-item';
                 let emoji = data.emoji || "❓";
-                item.innerHTML = `
-                    <div class="gb-emoji">${emoji}</div>
-                    <div class="gb-divider"></div>
-                    <div class="gb-content-wrap">
-                        <span class="gb-msg">${data.message}</span>
-                        <span class="gb-time">${timeStr}</span>
-                    </div>
-                `;
+                item.innerHTML = `<div class="gb-emoji">${emoji}</div><div class="gb-divider"></div><div class="gb-content-wrap"><span class="gb-msg">${data.message}</span><span class="gb-time">${timeStr}</span></div>`;
                 container.appendChild(item);
             });
         });
@@ -299,23 +297,9 @@
             const tagEl = document.getElementById('result-tag');
             const cardEl = document.getElementById('result-card');
 
-            // [수정] 카드 매칭 로직
-            if (finalType === 'a') { 
-                nameEl.innerText = "MAX"; 
-                cardEl.src = "card1.png"; 
-                tagEl.innerText = "유행의 선점"; 
-                currentResultEmoji = "🐆"; 
-            } else if (finalType === 'b') { 
-                nameEl.innerText = "HUGO"; 
-                cardEl.src = "card2.png"; 
-                tagEl.innerText = "취향의 독립"; 
-                currentResultEmoji = "🦍"; 
-            } else { 
-                nameEl.innerText = "KRU"; 
-                cardEl.src = "card3.png"; 
-                tagEl.innerText = "공감과 소속"; 
-                currentResultEmoji = "🐺"; 
-            }
+            if (finalType === 'a') { nameEl.innerText = "MAX"; cardEl.src = "card1.png"; tagEl.innerText = "유행의 선점"; currentResultEmoji = "🐆"; }
+            else if (finalType === 'b') { nameEl.innerText = "HUGO"; cardEl.src = "card2.png"; tagEl.innerText = "취향의 독립"; currentResultEmoji = "🦍"; }
+            else { nameEl.innerText = "KRU"; cardEl.src = "card3.png"; tagEl.innerText = "공감과 소속"; currentResultEmoji = "🐺"; }
 
             const q1Snap = await getDoc(doc(db, "surveyStats", "q1"));
             if (q1Snap.exists()) {
