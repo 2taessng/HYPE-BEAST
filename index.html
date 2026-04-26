@@ -33,10 +33,10 @@
         .page { display: none; }
         .page.active { display: block; text-align: center; }
 
-        /* 결과 페이지는 스크롤이 필요할 수 있음 */
-        #page-result.active { overflow-y: auto; height: 100%; padding-right: 10px; }
-        #page-result::-webkit-scrollbar { width: 6px; }
-        #page-result::-webkit-scrollbar-thumb { background: var(--btn-dark-navy); border-radius: 10px; }
+        /* 결과 및 방명록 페이지 스크롤 허용 */
+        #page-result.active, #page-guestbook.active { overflow-y: auto; height: 100%; padding-right: 10px; }
+        .page::-webkit-scrollbar { width: 6px; }
+        .page::-webkit-scrollbar-thumb { background: var(--btn-dark-navy); border-radius: 10px; }
 
         .main-logo { width: 100%; max-width: 380px; height: auto; margin-bottom: 25px; filter: brightness(0); opacity: 1.0; }
         .sub-logo { width: 100%; height: auto; margin-bottom: 20px; filter: brightness(0); display: block; }
@@ -64,22 +64,23 @@
 
         .result-category { font-weight: 900; font-size: 0.9rem; letter-spacing: 0.2em; color: rgba(0,0,0,0.7); display: block; }
         .result-name { font-weight: 900; font-size: 3.8rem; line-height: 1; margin: 5px 0; letter-spacing: -0.03em; }
-        .character-img { width: 200px; height: 200px; margin: 15px auto; background-size: contain; background-repeat: no-repeat; background-position: center; display: flex; align-items: center; justify-content: center; font-size: 70px; }
-        #result-tag { font-weight: 900; font-size: 1.1rem; color: var(--text-black); border-bottom: 4px solid var(--text-black); display: inline-block; margin-top: 5px; padding-bottom: 5px; }
+        .character-img { width: 220px; height: 220px; margin: 20px auto; background-size: contain; background-repeat: no-repeat; background-position: center; display: flex; align-items: center; justify-content: center; font-size: 80px; }
+        #result-tag { font-weight: 900; font-size: 1.2rem; color: var(--text-black); border-bottom: 4px solid var(--text-black); display: inline-block; margin-top: 10px; padding-bottom: 5px; }
 
-        .total-stats { margin: 30px 0; padding: 20px; background: rgb(220, 220, 220); border-radius: 10px; text-align: left; }
+        .total-stats { margin-top: 30px; padding: 20px; background: rgb(220, 220, 220); border-radius: 10px; text-align: left; }
         .stat-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 0.85rem; font-weight: 900; }
         .stat-bar-bg { flex-grow: 1; height: 8px; background: rgba(0,0,0,0.15); margin: 0 15px; }
         .stat-bar-fill { height: 100%; background: #000; width: 0%; transition: width 1s ease; }
 
-        /* [추가] 방명록 스타일 */
-        .guestbook-section { margin-top: 40px; text-align: left; background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; border: 2px solid var(--text-black); }
-        .guestbook-title { font-weight: 900; font-size: 1.2rem; margin-bottom: 15px; display: block; }
-        .guestbook-input-group { display: flex; gap: 10px; margin-bottom: 20px; }
-        .guestbook-input { flex-grow: 1; padding: 12px; border: 2px solid var(--text-black); border-radius: 5px; font-family: inherit; font-weight: 700; outline: none; }
-        .guestbook-btn { background: var(--text-black); color: white; border: none; padding: 0 20px; border-radius: 5px; font-weight: 900; cursor: pointer; }
-        .guestbook-list { list-style: none; padding: 0; margin: 0; max-height: 200px; overflow-y: auto; }
-        .guestbook-item { background: white; padding: 10px 15px; border-radius: 5px; margin-bottom: 10px; font-weight: 700; font-size: 0.9rem; border-left: 5px solid var(--btn-dark-navy); color: #333; }
+        /* 방명록 페이지 스타일 */
+        .gb-title { font-weight: 900; font-size: 2.2rem; margin-bottom: 30px; display: block; color: var(--text-black); text-align: left; padding-left: 5px; }
+        .gb-input-box { display: flex; gap: 10px; margin-bottom: 30px; }
+        .gb-input { flex-grow: 1; padding: 15px; border: 3px solid var(--text-black); border-radius: 6px; font-family: inherit; font-weight: 700; font-size: 1rem; outline: none; background: rgba(255,255,255,0.9); }
+        .gb-submit { background: var(--text-black); color: white; border: none; padding: 0 25px; border-radius: 6px; font-weight: 900; cursor: pointer; font-size: 1rem; }
+        .gb-list { list-style: none; padding: 0; margin: 0; text-align: left; }
+        .gb-item { background: white; padding: 15px; border-radius: 6px; margin-bottom: 12px; border-left: 6px solid var(--btn-dark-navy); position: relative; }
+        .gb-msg { font-weight: 700; font-size: 1rem; color: #111; display: block; margin-bottom: 5px; word-break: break-all; }
+        .gb-time { font-size: 0.75rem; color: #888; font-weight: 400; }
     </style>
 </head>
 <body>
@@ -103,7 +104,6 @@
                 <button class="opt-btn" onclick="handleSelect('q1', 'b')"><span>B. 혼자 고민을 깊게 한다</span><div class="btn-fill" id="bar-q1-b"></div><span class="stat-text" id="text-q1-b"></span></button>
                 <button class="opt-btn" onclick="handleSelect('q1', 'c')"><span>C. 반응을 보고 결정한다</span><div class="btn-fill" id="bar-q1-c"></div><span class="stat-text" id="text-q1-c"></span></button>
             </div>
-
             <div id="page-q2" class="page">
                 <img src="logo3.png" alt="sub-logo" class="sub-logo">
                 <div class="progress-container">
@@ -149,23 +149,23 @@
                 <div id="result-tag"></div>
                 
                 <div class="total-stats">
-                    <span style="font-weight:900; font-size:0.95rem; display:block; border-bottom:2px solid #000; padding-bottom:5px; margin-bottom:12px;" id="total-count-text">현재 0명이 참여했습니다</span>
+                    <span style="font-weight: 900; font-size: 0.95rem; display: block; border-bottom: 2px solid #000; padding-bottom: 5px; margin-bottom: 12px;" id="total-count-text">참여 통계</span>
                     <div class="stat-row"><span>MAX</span><div class="stat-bar-bg"><div id="bar-total-a" class="stat-bar-fill"></div></div><span id="percent-total-a">0%</span></div>
                     <div class="stat-row"><span>HUGO</span><div class="stat-bar-bg"><div id="bar-total-b" class="stat-bar-fill"></div></div><span id="percent-total-b">0%</span></div>
                     <div class="stat-row"><span>KRU</span><div class="stat-bar-bg"><div id="bar-total-c" class="stat-bar-fill"></div></div><span id="percent-total-c">0%</span></div>
                 </div>
+                <button class="main-btn" onclick="nextPage('guestbook')">방명록 남기기</button>
+            </div>
 
-                <div class="guestbook-section">
-                    <span class="guestbook-title">GUESTBOOK</span>
-                    <div class="guestbook-input-group">
-                        <input type="text" id="guest-msg" class="guestbook-input" placeholder="짧은 소감을 남겨주세요!" maxlength="50">
-                        <button class="guestbook-btn" onclick="sendGuestMsg()">남기기</button>
-                    </div>
-                    <ul id="guestbook-list" class="guestbook-list">
-                        </ul>
+            <div id="page-guestbook" class="page">
+                <span class="gb-title">GUESTBOOK</span>
+                <div class="gb-input-box">
+                    <input type="text" id="gb-input-field" class="gb-input" placeholder="짧은 인사를 남겨주세요." maxlength="60">
+                    <button class="gb-submit" onclick="submitGuestbook()">전송</button>
                 </div>
-
-                <button class="main-btn" style="margin-bottom: 50px;" onclick="resetTest()">다시하기</button>
+                <div id="gb-list-container" class="gb-list">
+                    </div>
+                <button class="main-btn" style="margin: 40px 0; background: #555;" onclick="resetTest()">처음으로</button>
             </div>
         </div>
     </div>
@@ -200,40 +200,41 @@
         window.resetTest = function() {
             userAnswers = { a: 0, b: 0, c: 0 };
             answerHistory = [];
-            isProcessing = false;
             document.querySelectorAll('.opt-btn').forEach(btn => btn.disabled = false);
-            document.querySelectorAll('.btn-fill').forEach(fill => fill.style.width = "0%");
-            document.querySelectorAll('.stat-text').forEach(txt => txt.innerText = "");
-            document.getElementById('guest-msg').value = "";
+            document.querySelectorAll('.btn-fill').forEach(f => f.style.width = "0%");
+            document.querySelectorAll('.stat-text').forEach(t => t.innerText = "");
+            document.getElementById('gb-input-field').value = "";
             nextPage('start');
         };
 
-        // [추가] 방명록 메시지 전송
-        window.sendGuestMsg = async function() {
-            const msgInput = document.getElementById('guest-msg');
-            const msg = msgInput.value.trim();
+        // 방명록 제출
+        window.submitGuestbook = async function() {
+            const input = document.getElementById('gb-input-field');
+            const msg = input.value.trim();
             if(!msg) return;
-
             try {
                 await addDoc(collection(db, "guestbook"), {
                     message: msg,
                     timestamp: serverTimestamp()
                 });
-                msgInput.value = "";
-            } catch (e) { console.error(e); }
+                input.value = "";
+            } catch(e) { console.error(e); }
         };
 
-        // [추가] 방명록 실시간 리스너
-        const q = query(collection(db, "guestbook"), orderBy("timestamp", "desc"), limit(20));
-        onSnapshot(q, (snapshot) => {
-            const listEl = document.getElementById('guestbook-list');
-            listEl.innerHTML = "";
-            snapshot.forEach((doc) => {
+        // 방명록 실시간 리스너 및 날짜 변환
+        const q = query(collection(db, "guestbook"), orderBy("timestamp", "desc"), limit(30));
+        onSnapshot(q, (snap) => {
+            const container = document.getElementById('gb-list-container');
+            container.innerHTML = "";
+            snap.forEach((doc) => {
                 const data = doc.data();
-                const li = document.createElement('li');
-                li.className = 'guestbook-item';
-                li.innerText = data.message;
-                listEl.appendChild(li);
+                const dateObj = data.timestamp ? data.timestamp.toDate() : new Date();
+                const timeStr = `${dateObj.getMonth()+1}/${dateObj.getDate()} ${dateObj.getHours()}:${String(dateObj.getMinutes()).padStart(2,'0')}`;
+                
+                const item = document.createElement('div');
+                item.className = 'gb-item';
+                item.innerHTML = `<span class="gb-msg">${data.message}</span><span class="gb-time">${timeStr}</span>`;
+                container.appendChild(item);
             });
         });
 
@@ -272,17 +273,17 @@
         async function calculateResult() {
             nextPage('result');
             const { a, b, c } = userAnswers;
-            const nameEl = document.getElementById('result-name');
-            const tagEl = document.getElementById('result-tag');
-            const imgEl = document.getElementById('char-img');
-            let finalType = "";
             const maxVal = Math.max(a, b, c);
             const candidates = [];
             if (a === maxVal) candidates.push('a');
             if (b === maxVal) candidates.push('b');
             if (c === maxVal) candidates.push('c');
-            finalType = (candidates.length === 1) ? candidates[0] : answerHistory.find(ans => candidates.includes(ans));
+            let finalType = (candidates.length === 1) ? candidates[0] : answerHistory.find(ans => candidates.includes(ans));
             
+            const nameEl = document.getElementById('result-name');
+            const tagEl = document.getElementById('result-tag');
+            const imgEl = document.getElementById('char-img');
+
             if (finalType === 'a') { nameEl.innerText = "MAX"; imgEl.innerText = "🐺"; tagEl.innerText = "유행의 선점"; }
             else if (finalType === 'b') { nameEl.innerText = "HUGO"; imgEl.innerText = "🦍"; tagEl.innerText = "취향의 독립"; }
             else { nameEl.innerText = "KRU"; imgEl.innerText = "🐆"; tagEl.innerText = "공감과 소속"; }
@@ -291,7 +292,7 @@
             if (q1Snap.exists()) {
                 const d = q1Snap.data();
                 const total = (d.A||0)+(d.B||0)+(d.C||0);
-                document.getElementById('total-count-text').innerText = `현재 ${total}명이 참여했습니다`;
+                document.getElementById('total-count-text').innerText = `현재 ${total}명이 함께했습니다`;
                 ['A','B','C'].forEach(id => {
                     const count = d[id] || 0;
                     const p = total > 0 ? Math.round((count/total)*100) : 0;
