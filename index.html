@@ -87,8 +87,7 @@
         #result-tag { font-weight: 900; font-size: 1.35rem; color: var(--text-black); border-bottom: 4px solid var(--text-black); display: inline-block; padding-bottom: 5px; margin-bottom: 8px; }
         #result-desc { font-weight: 700; font-size: 0.95rem; color: var(--text-black); display: block; line-height: 1.4; opacity: 0.9; }
 
-        /* [수정] 결과 페이지 하단 참여 비율 바 컬러 수정 (#232948) */
-        .total-stats { margin: 15px 0 10px 0; padding: 18px; background: rgba(0,0,0,0.05); border-radius: 10px; text-align: left; width: 100%; box-sizing: border-box; }
+        .total-stats { margin: 15px 0 10px 0; padding: 18px; background: #5666af; border-radius: 10px; text-align: left; width: 100%; box-sizing: border-box; }
         .stat-header { font-weight: 900; font-size: 1.1rem; display: block; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 12px; }
         .stat-row { display: flex; align-items: center; margin-bottom: 10px; font-size: 0.9rem; font-weight: 900; }
         .stat-name { width: 60px; flex-shrink: 0; } 
@@ -111,9 +110,22 @@
         .gb-msg { font-weight: 900; font-size: 1.05rem; color: var(--text-black); display: block; margin-bottom: 3px; word-break: break-all; }
         .gb-time { font-size: 0.75rem; color: rgba(0,0,0,0.5); font-weight: 700; }
         
-        /* [수정] 방명록 하단 페이지네이션 컬러 수정 (#232948) */
-        .pagination { display: flex; justify-content: center; gap: 8px; margin: 0; width: 100%; }
-        .pg-btn { width: 38px; height: 38px; border: 3px solid #232948; background: transparent; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; border-radius: 6px; font-family: inherit; color: #232948; }
+        /* [수정] 방명록 하단 페이지네이션 번호 크기 대폭 키움 */
+        .pagination { display: flex; justify-content: center; gap: 10px; margin: 10px 0; width: 100%; }
+        .pg-btn { 
+            width: 48px; height: 48px; /* 38px -> 48px */
+            border: 3px solid #232948; 
+            background: transparent; 
+            font-weight: 900; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            border-radius: 8px; 
+            font-family: inherit; 
+            color: #232948; 
+            font-size: 1.2rem; /* 글자 크기 증가 */
+        }
         .pg-btn.active { background: #232948; color: var(--btn-text-main); }
         .pg-btn:disabled { opacity: 0.3; cursor: default; }
 
@@ -136,7 +148,6 @@
                 <button class="main-btn" onclick="nextPage('q1')">시작하기</button>
             </div>
 
-            <!-- 질문 페이지들 -->
             <div id="page-q1" class="page">
                 <img src="logo3.png" alt="sub-logo" class="sub-logo">
                 <div class="progress-container"><div class="progress-info"><span>Q 1 / 4</span><span>25%</span></div><div class="main-progress-bg"><div class="main-progress-fill" style="width: 25%;"></div></div></div>
@@ -170,7 +181,6 @@
                 <button class="opt-btn" onclick="handleSelect('q4', 'c')"><span>C. 취향과 기준</span><div class="btn-fill" id="bar-q4-c"></div><span class="stat-text" id="text-q4-c"></span></button>
             </div>
 
-            <!-- 결과 페이지 -->
             <div id="page-result" class="page">
                 <div class="result-wrapper">
                     <div class="result-header">
@@ -192,7 +202,6 @@
                 </div>
             </div>
 
-            <!-- 방명록 페이지 -->
             <div id="page-guestbook" class="page">
                 <div class="gb-fixed-header">
                     <span class="gb-title">GUESTBOOK</span>
@@ -212,7 +221,6 @@
         </div>
     </div>
 
-    <!-- 모달 -->
     <div id="custom-modal">
         <div class="modal-content">
             <span class="modal-text">방명록을<br>등록하시겠습니까?</span>
