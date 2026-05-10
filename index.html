@@ -54,14 +54,16 @@
         .page { display: none; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; }
         .page.active { display: flex; text-align: center; animation: fadeIn 0.5s ease-out forwards; }
 
-        /* [수정] 영상 페이지 배경 박스 제거 */
+        /* [수정] 영상 로딩 페이지 - 배경색 제거 및 자연스러운 그림자 추가 */
         #page-video.active { display: flex; background: transparent; }
         .result-video { 
             width: 100%; 
             max-width: 460px; 
             border-radius: 12px; 
-            background: transparent !important; /* 배경 제거 */
-            box-shadow: none !important; /* 박스 그림자 제거 */
+            background: transparent !important; 
+            box-shadow: none !important;
+            /* 캐릭터 형태에 맞춰 부드러운 그림자 생성 */
+            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.5)); 
         }
 
         #page-result.active { overflow-y: auto; justify-content: center; padding: 20px 10px; }
@@ -108,7 +110,7 @@
         .stat-row { display: flex; align-items: center; margin-bottom: 10px; font-size: 0.9rem; font-weight: 900; }
         .stat-name { width: 60px; flex-shrink: 0; } 
         .stat-bar-bg { flex-grow: 1; height: 9px; background: rgba(0,0,0,0.1); margin: 0 12px; border-radius: 5px; overflow: hidden; }
-        .stat-bar-fill { height: 100%; background: #232948; width: 0%; transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1); }
+        .stat-bar-fill { height: 100%; background: #232948; width: 0%; transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1); }
         .stat-percent { width: 45px; text-align: right; flex-shrink: 0; }
 
         .gb-title { font-weight: 900; font-size: 2.2rem; margin-bottom: 20px; display: block; color: var(--text-black); text-align: left; padding-left: 5px; width: 100%; }
@@ -136,6 +138,7 @@
         .pagination { display: flex; justify-content: center; gap: 10px; margin: 10px 0; width: 100%; }
         .pg-btn { width: 48px; height: 48px; border: 3px solid #232948; background: transparent; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-family: inherit; color: #232948; font-size: 1.2rem; transition: all 0.2s; }
         .pg-btn.active { background: #232948; color: var(--btn-text-main); transform: scale(1.05); }
+        .pg-btn:disabled { opacity: 0.3; cursor: default; }
 
         #custom-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
         .modal-content { background: var(--main-bg); border: 4px solid var(--text-black); border-radius: 12px; padding: 35px; text-align: center; max-width: 320px; width: 80%; box-shadow: 0 15px 30px rgba(0,0,0,0.5); animation: slideUp 0.3s ease-out; }
