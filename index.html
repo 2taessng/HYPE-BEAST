@@ -85,7 +85,6 @@
         .opt-btn:disabled { cursor: default; opacity: 0.8; }
         .btn-fill { position: absolute; top: 0; left: 0; bottom: 0; width: 0%; background-color: var(--bar-gauge); z-index: -1; transition: width 1s cubic-bezier(0.65, 0, 0.35, 1); }
         .stat-text { font-weight: 900; font-size: 1rem; pointer-events: none; margin-left: 10px; flex-shrink: 0; }
-        
         .main-btn { margin-top: 25px; padding: 15px 45px; background: var(--btn-bg-main); color: var(--btn-text-main); border: none; font-size: 1.2rem; font-weight: 700; cursor: pointer; letter-spacing: 0.1em; border-radius: 6px; transition: opacity 0.2s; }
         .main-btn:active { opacity: 0.8; transform: scale(0.95); }
 
@@ -106,10 +105,15 @@
         .stat-percent { width: 45px; text-align: right; flex-shrink: 0; }
 
         .gb-title { font-weight: 900; font-size: 2.2rem; margin-bottom: 20px; display: block; color: var(--text-black); text-align: left; padding-left: 5px; width: 100%; }
-        .gb-input-box { display: flex; gap: 10px; margin-bottom: 12px; width: 100%; }
-        .gb-input { flex-grow: 1; padding: 15px; border: 3px solid var(--text-black); border-radius: 6px; font-family: inherit; font-weight: 900; font-size: 1rem; outline: none; background: rgba(255,255,255,0.1); color: var(--text-black); }
+        
+        /* [수정] 방명록 입력 영역 레이아웃 */
+        .gb-input-box { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; width: 100%; }
+        .gb-input-row { display: flex; gap: 10px; width: 100%; }
+        .gb-input { padding: 15px; border: 3px solid var(--text-black); border-radius: 6px; font-family: inherit; font-weight: 900; font-size: 1rem; outline: none; background: rgba(255,255,255,0.1); color: var(--text-black); }
         .gb-input::placeholder { color: rgba(0,0,0,0.6); font-weight: 700; } 
-        .gb-submit { background: var(--btn-bg-main); color: var(--btn-text-main); border: none; padding: 0 25px; border-radius: 6px; font-weight: 900; cursor: pointer; font-size: 1rem; }
+        #gb-nickname-field { width: 100px; flex-shrink: 0; }
+        #gb-input-field { flex-grow: 1; }
+        .gb-submit { background: var(--btn-bg-main); color: var(--btn-text-main); border: none; padding: 15px 0; border-radius: 6px; font-weight: 900; cursor: pointer; font-size: 1rem; width: 100%; }
         
         .gb-list { list-style: none; padding: 0; margin: 0; text-align: left; width: 100%; }
         .gb-item { background: transparent; padding: 15px; border: 3px solid var(--text-black); border-radius: 6px; margin-bottom: 12px; display: flex; align-items: center; animation: fadeIn 0.5s ease forwards; opacity: 0; }
@@ -124,16 +128,13 @@
         .pg-btn { width: 48px; height: 48px; border: 3px solid #232948; background: transparent; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-family: inherit; color: #232948; font-size: 1.2rem; transition: all 0.2s; }
         .pg-btn.active { background: #232948; color: var(--btn-text-main); transform: scale(1.05); }
 
-        /* [수정] 모달 디자인 교정 - 기존 테마와 통일 */
-        #custom-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
+        #custom-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
         .modal-content { background: var(--main-bg); border: 4px solid var(--text-black); border-radius: 12px; padding: 35px; text-align: center; max-width: 320px; width: 80%; box-shadow: 0 15px 30px rgba(0,0,0,0.5); animation: slideUp 0.3s ease-out; }
         .modal-text { font-weight: 900; font-size: 1.4rem; color: var(--text-black); margin-bottom: 30px; display: block; line-height: 1.4; }
         .modal-btn-group { display: flex; gap: 12px; justify-content: center; }
         .modal-btn { padding: 12px 20px; border: 3px solid var(--text-black); border-radius: 6px; font-weight: 900; font-size: 1.1rem; cursor: pointer; flex: 1; transition: all 0.2s; }
-        /* 버튼 컬러 교정 */
         .modal-btn.confirm { background: var(--btn-bg-main); color: var(--btn-text-main); border: 3px solid var(--text-black); }
         .modal-btn.cancel { background: transparent; color: var(--text-black); border: 3px solid var(--text-black); }
-        .modal-btn:active { transform: scale(0.95); }
     </style>
 </head>
 <body>
@@ -212,7 +213,10 @@
                 <div class="gb-fixed-header">
                     <span class="gb-title">GUESTBOOK</span>
                     <div class="gb-input-box">
-                        <input type="text" id="gb-input-field" class="gb-input" placeholder="방명록을 남겨주세요." maxlength="60">
+                        <div class="gb-input-row">
+                            <input type="text" id="gb-nickname-field" class="gb-input" placeholder="이름" maxlength="5">
+                            <input type="text" id="gb-input-field" class="gb-input" placeholder="방명록을 남겨주세요." maxlength="50">
+                        </div>
                         <button class="gb-submit" onclick="showModal()">전송</button>
                     </div>
                     <button class="main-btn" style="margin: 0; width: 100%; padding: 15px; font-weight: 700;" onclick="resetTest()">처음으로 (다시하기)</button>
@@ -276,14 +280,19 @@
             document.querySelectorAll('.opt-btn').forEach(btn => btn.disabled = false);
             document.querySelectorAll('.btn-fill').forEach(f => f.style.width = "0%");
             document.querySelectorAll('.stat-text').forEach(t => t.innerText = "");
+            document.getElementById('gb-nickname-field').value = "";
             document.getElementById('gb-input-field').value = "";
             currentPage = 1;
             nextPage('start');
         };
 
         window.showModal = function() {
+            const nickname = document.getElementById('gb-nickname-field').value.trim();
             const msg = document.getElementById('gb-input-field').value.trim();
-            if(!msg) return;
+            if(!nickname || !msg) {
+                alert("이름과 메시지를 모두 입력해주세요.");
+                return;
+            }
             document.getElementById('custom-modal').style.display = 'flex';
         };
 
@@ -291,15 +300,20 @@
 
         window.confirmSubmit = async function() {
             closeModal();
-            const input = document.getElementById('gb-input-field');
-            const msg = input.value.trim();
+            const nickInput = document.getElementById('gb-nickname-field');
+            const msgInput = document.getElementById('gb-input-field');
+            const nickname = nickInput.value.trim();
+            const msg = msgInput.value.trim();
+            
             try {
                 await addDoc(collection(db, "guestbook"), {
                     headImg: currentResultHead, 
+                    nickname: nickname, // [수정] 닉네임 저장
                     message: msg,
                     timestamp: serverTimestamp()
                 });
-                input.value = "";
+                nickInput.value = "";
+                msgInput.value = "";
             } catch(e) { console.error(e); }
         };
 
@@ -327,11 +341,12 @@
                 item.style.animationDelay = `${index * 0.08}s`;
                 
                 let headImg = data.headImg || "head1.png"; 
+                let nickname = data.nickname || "익명";
                 item.innerHTML = `
                     <div class="gb-head-wrap"><img src="${headImg}" class="gb-head-img"></div>
                     <div class="gb-divider"></div>
                     <div class="gb-content-wrap">
-                        <span class="gb-msg">${data.message}</span>
+                        <span class="gb-msg"><strong>${nickname}</strong> : ${data.message}</span>
                         <span class="gb-time">${timeStr}</span>
                     </div>`;
                 container.appendChild(item);
