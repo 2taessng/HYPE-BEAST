@@ -54,8 +54,15 @@
         .page { display: none; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; }
         .page.active { display: flex; text-align: center; animation: fadeIn 0.5s ease-out forwards; }
 
-        #page-video.active { display: flex; background: var(--main-bg); }
-        .result-video { width: 100%; max-width: 460px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        /* [수정] 영상 페이지 배경 박스 제거 */
+        #page-video.active { display: flex; background: transparent; }
+        .result-video { 
+            width: 100%; 
+            max-width: 460px; 
+            border-radius: 12px; 
+            background: transparent !important; /* 배경 제거 */
+            box-shadow: none !important; /* 박스 그림자 제거 */
+        }
 
         #page-result.active { overflow-y: auto; justify-content: center; padding: 20px 10px; }
         #page-guestbook.active { display: flex; flex-direction: column; justify-content: flex-start; overflow: hidden; height: 100%; }
@@ -122,7 +129,6 @@
         .gb-content-wrap { flex-grow: 1; }
         .gb-msg { font-weight: 900; font-size: 1.05rem; color: var(--text-black); display: block; margin-bottom: 3px; word-break: break-all; }
         
-        /* 하단 이름 및 시간 스타일 */
         .gb-info-row { font-size: 0.75rem; color: rgba(0,0,0,0.6); font-weight: 700; }
         .gb-time { margin-right: 8px; }
         .gb-nick { color: var(--text-black); }
@@ -131,7 +137,7 @@
         .pg-btn { width: 48px; height: 48px; border: 3px solid #232948; background: transparent; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-family: inherit; color: #232948; font-size: 1.2rem; transition: all 0.2s; }
         .pg-btn.active { background: #232948; color: var(--btn-text-main); transform: scale(1.05); }
 
-        #custom-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
+        #custom-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
         .modal-content { background: var(--main-bg); border: 4px solid var(--text-black); border-radius: 12px; padding: 35px; text-align: center; max-width: 320px; width: 80%; box-shadow: 0 15px 30px rgba(0,0,0,0.5); animation: slideUp 0.3s ease-out; }
         .modal-text { font-weight: 900; font-size: 1.4rem; color: var(--text-black); margin-bottom: 30px; display: block; line-height: 1.4; }
         .modal-btn-group { display: flex; gap: 12px; justify-content: center; }
@@ -220,7 +226,7 @@
                             <input type="text" id="gb-nickname-field" class="gb-input" placeholder="이름" maxlength="5">
                             <input type="text" id="gb-input-field" class="gb-input" placeholder="방명록을 남겨주세요.(최대 50자)" maxlength="50">
                         </div>
-                        <button class="gb-submit" onclick="showModal()">전송</button>
+                        <button class="gb-submit" onclick="showModal('submit')">전송</button>
                     </div>
                     <button class="main-btn" style="margin: 0; width: 100%; padding: 15px; font-weight: 700;" onclick="resetTest()">처음으로 (다시하기)</button>
                 </div>
@@ -236,10 +242,10 @@
 
     <div id="custom-modal">
         <div class="modal-content">
-            <span class="modal-text">방명록을<br>등록하시겠습니까?</span>
+            <span id="modal-msg" class="modal-text">방명록을<br>등록하시겠습니까?</span>
             <div class="modal-btn-group">
-                <button class="modal-btn cancel" onclick="closeModal()">취소</button>
-                <button class="modal-btn confirm" onclick="confirmSubmit()">확인</button>
+                <button id="modal-cancel-btn" class="modal-btn cancel" onclick="closeModal()">취소</button>
+                <button id="modal-confirm-btn" class="modal-btn confirm" onclick="confirmSubmit()">확인</button>
             </div>
         </div>
     </div>
@@ -267,6 +273,7 @@
         let currentResultHead = ""; 
         let allGuestMessages = [];
         let currentPage = 1;
+        let currentModalMode = ""; 
         const itemsPerPage = 15;
 
         window.nextPage = function(pId) {
@@ -289,12 +296,22 @@
             nextPage('start');
         };
 
-        window.showModal = function() {
+        window.showModal = function(mode) {
+            currentModalMode = mode;
             const nickname = document.getElementById('gb-nickname-field').value.trim();
             const msg = document.getElementById('gb-input-field').value.trim();
-            if(!nickname || !msg) {
-                alert("이름과 메시지를 모두 입력해주세요.");
-                return;
+            const modalMsg = document.getElementById('modal-msg');
+            const cancelBtn = document.getElementById('modal-cancel-btn');
+
+            if(mode === 'submit') {
+                if(!nickname || !msg) {
+                    modalMsg.innerHTML = "이름과 메시지를<br>모두 입력해주세요.";
+                    cancelBtn.style.display = "none";
+                    currentModalMode = "alert";
+                } else {
+                    modalMsg.innerHTML = "방명록을<br>등록하시겠습니까?";
+                    cancelBtn.style.display = "inline-block";
+                }
             }
             document.getElementById('custom-modal').style.display = 'flex';
         };
@@ -302,6 +319,10 @@
         window.closeModal = function() { document.getElementById('custom-modal').style.display = 'none'; };
 
         window.confirmSubmit = async function() {
+            if(currentModalMode === "alert") {
+                closeModal();
+                return;
+            }
             closeModal();
             const nickInput = document.getElementById('gb-nickname-field');
             const msgInput = document.getElementById('gb-input-field');
@@ -346,7 +367,6 @@
                 let headImg = data.headImg || "head1.png"; 
                 let nickname = data.nickname || "익명";
                 
-                // [수정] 이름 위치를 본문이 아닌 날짜 시간 옆으로 이동
                 item.innerHTML = `
                     <div class="gb-head-wrap"><img src="${headImg}" class="gb-head-img"></div>
                     <div class="gb-divider"></div>
