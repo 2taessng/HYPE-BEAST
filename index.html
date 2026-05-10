@@ -85,6 +85,7 @@
         .opt-btn:disabled { cursor: default; opacity: 0.8; }
         .btn-fill { position: absolute; top: 0; left: 0; bottom: 0; width: 0%; background-color: var(--bar-gauge); z-index: -1; transition: width 1s cubic-bezier(0.65, 0, 0.35, 1); }
         .stat-text { font-weight: 900; font-size: 1rem; pointer-events: none; margin-left: 10px; flex-shrink: 0; }
+        
         .main-btn { margin-top: 25px; padding: 15px 45px; background: var(--btn-bg-main); color: var(--btn-text-main); border: none; font-size: 1.2rem; font-weight: 700; cursor: pointer; letter-spacing: 0.1em; border-radius: 6px; transition: opacity 0.2s; }
         .main-btn:active { opacity: 0.8; transform: scale(0.95); }
 
@@ -123,8 +124,16 @@
         .pg-btn { width: 48px; height: 48px; border: 3px solid #232948; background: transparent; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-family: inherit; color: #232948; font-size: 1.2rem; transition: all 0.2s; }
         .pg-btn.active { background: #232948; color: var(--btn-text-main); transform: scale(1.05); }
 
-        #custom-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; }
-        .modal-content { background: var(--main-bg); border: 4px solid var(--text-black); border-radius: 12px; padding: 30px; text-align: center; max-width: 320px; width: 80%; box-shadow: 0 15px 30px rgba(0,0,0,0.5); animation: slideUp 0.3s ease-out; }
+        /* [수정] 모달 디자인 교정 - 기존 테마와 통일 */
+        #custom-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
+        .modal-content { background: var(--main-bg); border: 4px solid var(--text-black); border-radius: 12px; padding: 35px; text-align: center; max-width: 320px; width: 80%; box-shadow: 0 15px 30px rgba(0,0,0,0.5); animation: slideUp 0.3s ease-out; }
+        .modal-text { font-weight: 900; font-size: 1.4rem; color: var(--text-black); margin-bottom: 30px; display: block; line-height: 1.4; }
+        .modal-btn-group { display: flex; gap: 12px; justify-content: center; }
+        .modal-btn { padding: 12px 20px; border: 3px solid var(--text-black); border-radius: 6px; font-weight: 900; font-size: 1.1rem; cursor: pointer; flex: 1; transition: all 0.2s; }
+        /* 버튼 컬러 교정 */
+        .modal-btn.confirm { background: var(--btn-bg-main); color: var(--btn-text-main); border: 3px solid var(--text-black); }
+        .modal-btn.cancel { background: transparent; color: var(--text-black); border: 3px solid var(--text-black); }
+        .modal-btn:active { transform: scale(0.95); }
     </style>
 </head>
 <body>
@@ -137,7 +146,6 @@
                 <button class="main-btn" onclick="nextPage('q1')">시작하기</button>
             </div>
 
-            <!-- Q1 수정 완료 -->
             <div id="page-q1" class="page">
                 <img src="logo3.png" alt="sub-logo" class="sub-logo">
                 <div class="progress-container"><div class="progress-info"><span>Q 1 / 4</span><span>25%</span></div><div class="main-progress-bg"><div class="main-progress-fill" style="width: 25%;"></div></div></div>
@@ -147,7 +155,6 @@
                 <button class="opt-btn" onclick="handleSelect('q1', 'c')"><span>C. 혼자 고민을 깊게 하고 결정한다</span><div class="btn-fill" id="bar-q1-c"></div><span class="stat-text" id="text-q1-c"></span></button>
             </div>
 
-            <!-- Q2 수정 완료 -->
             <div id="page-q2" class="page">
                 <img src="logo3.png" alt="sub-logo" class="sub-logo">
                 <div class="progress-container"><div class="progress-info"><span>Q 2 / 4</span><span>50%</span></div><div class="main-progress-bg"><div class="main-progress-fill" style="width: 50%;"></div></div></div>
@@ -157,7 +164,6 @@
                 <button class="opt-btn" onclick="handleSelect('q2', 'c')"><span>C. 유행이든 아니든, 내가 끌려야 먹는다</span><div class="btn-fill" id="bar-q2-c"></div><span class="stat-text" id="text-q2-c"></span></button>
             </div>
 
-            <!-- Q3 수정 완료 -->
             <div id="page-q3" class="page">
                 <img src="logo3.png" alt="sub-logo" class="sub-logo">
                 <div class="progress-container"><div class="progress-info"><span>Q 3 / 4</span><span>75%</span></div><div class="main-progress-bg"><div class="main-progress-fill" style="width: 75%;"></div></div></div>
