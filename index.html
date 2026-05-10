@@ -106,7 +106,6 @@
 
         .gb-title { font-weight: 900; font-size: 2.2rem; margin-bottom: 20px; display: block; color: var(--text-black); text-align: left; padding-left: 5px; width: 100%; }
         
-        /* [수정] 방명록 입력 영역 레이아웃 */
         .gb-input-box { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; width: 100%; }
         .gb-input-row { display: flex; gap: 10px; width: 100%; }
         .gb-input { padding: 15px; border: 3px solid var(--text-black); border-radius: 6px; font-family: inherit; font-weight: 900; font-size: 1rem; outline: none; background: rgba(255,255,255,0.1); color: var(--text-black); }
@@ -122,8 +121,12 @@
         .gb-divider { width: 2px; height: 25px; background-color: var(--text-black); margin-right: 15px; opacity: 0.3; }
         .gb-content-wrap { flex-grow: 1; }
         .gb-msg { font-weight: 900; font-size: 1.05rem; color: var(--text-black); display: block; margin-bottom: 3px; word-break: break-all; }
-        .gb-time { font-size: 0.75rem; color: rgba(0,0,0,0.5); font-weight: 700; }
         
+        /* 하단 이름 및 시간 스타일 */
+        .gb-info-row { font-size: 0.75rem; color: rgba(0,0,0,0.6); font-weight: 700; }
+        .gb-time { margin-right: 8px; }
+        .gb-nick { color: var(--text-black); }
+
         .pagination { display: flex; justify-content: center; gap: 10px; margin: 10px 0; width: 100%; }
         .pg-btn { width: 48px; height: 48px; border: 3px solid #232948; background: transparent; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-family: inherit; color: #232948; font-size: 1.2rem; transition: all 0.2s; }
         .pg-btn.active { background: #232948; color: var(--btn-text-main); transform: scale(1.05); }
@@ -215,7 +218,7 @@
                     <div class="gb-input-box">
                         <div class="gb-input-row">
                             <input type="text" id="gb-nickname-field" class="gb-input" placeholder="이름" maxlength="5">
-                            <input type="text" id="gb-input-field" class="gb-input" placeholder="방명록을 남겨주세요." maxlength="50">
+                            <input type="text" id="gb-input-field" class="gb-input" placeholder="방명록을 남겨주세요.(최대 50자)" maxlength="50">
                         </div>
                         <button class="gb-submit" onclick="showModal()">전송</button>
                     </div>
@@ -308,7 +311,7 @@
             try {
                 await addDoc(collection(db, "guestbook"), {
                     headImg: currentResultHead, 
-                    nickname: nickname, // [수정] 닉네임 저장
+                    nickname: nickname,
                     message: msg,
                     timestamp: serverTimestamp()
                 });
@@ -342,12 +345,17 @@
                 
                 let headImg = data.headImg || "head1.png"; 
                 let nickname = data.nickname || "익명";
+                
+                // [수정] 이름 위치를 본문이 아닌 날짜 시간 옆으로 이동
                 item.innerHTML = `
                     <div class="gb-head-wrap"><img src="${headImg}" class="gb-head-img"></div>
                     <div class="gb-divider"></div>
                     <div class="gb-content-wrap">
-                        <span class="gb-msg"><strong>${nickname}</strong> : ${data.message}</span>
-                        <span class="gb-time">${timeStr}</span>
+                        <span class="gb-msg">${data.message}</span>
+                        <div class="gb-info-row">
+                            <span class="gb-time">${timeStr}</span>
+                            <span class="gb-nick">| ${nickname}</span>
+                        </div>
                     </div>`;
                 container.appendChild(item);
             });
