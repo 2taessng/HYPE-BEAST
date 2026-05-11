@@ -497,5 +497,36 @@
             }
         }
     </script>
+
+    <!-- ========================================== -->
+    <!-- 💡 화면 꺼짐 방지(Wake Lock) 스크립트 추가됨 -->
+    <!-- ========================================== -->
+    <script>
+        let wakeLock = null;
+
+        // 1. 화면 켜짐 유지(Wake Lock) 요청 함수
+        const requestWakeLock = async () => {
+            try {
+                if ('wakeLock' in navigator) {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                    console.log('✅ 화면 꺼짐 방지가 활성화되었습니다.');
+                } else {
+                    console.log('❌ 이 브라우저는 Wake Lock API를 지원하지 않습니다.');
+                }
+            } catch (err) {
+                console.error(`Wake Lock Error: ${err.name}, ${err.message}`);
+            }
+        };
+
+        // 2. 웹페이지가 처음 열릴 때 실행
+        requestWakeLock();
+
+        // 3. (중요) 화면이 잠깐 꺼졌거나 백그라운드로 갔다가 다시 돌아왔을 때 재활성화
+        document.addEventListener('visibilitychange', async () => {
+            if (wakeLock !== null && document.visibilityState === 'visible') {
+                requestWakeLock();
+            }
+        });
+    </script>
 </body>
 </html>
