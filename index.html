@@ -255,15 +255,13 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, doc, updateDoc, increment, getDoc, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // --- [추가] 화면 꺼짐 방지(Wake Lock) 시스템 상단 배치 ---
+        // --- 상시 전시용 화면 꺼짐 방지(Wake Lock) 시스템 ---
         let wakeLock = null;
         const requestWakeLock = async () => {
             try {
                 if ('wakeLock' in navigator) {
                     wakeLock = await navigator.wakeLock.request('screen');
                     console.log('✅ 화면 꺼짐 방지가 활성화되었습니다.');
-                } else {
-                    console.log('❌ 이 브라우저는 Wake Lock API를 지원하지 않습니다.');
                 }
             } catch (err) {
                 console.error(`Wake Lock Error: ${err.name}, ${err.message}`);
@@ -277,7 +275,6 @@
                 requestWakeLock();
             }
         });
-        // ----------------------------------------------------
 
         const firebaseConfig = {
             apiKey: "AIzaSyDdSXJJ2grh1GNA_vusNJRm9djRpRH1ggo",
@@ -309,6 +306,13 @@
         };
 
         window.resetTest = function() {
+            // [추가보완] 초기화 시 비디오 요소를 안전하게 한 번 더 비우고 GC 힌트 제공 (메모리 관리)
+            const videoEl = document.getElementById('loading-video');
+            if(videoEl) {
+                videoEl.pause();
+                videoEl.src = "";
+                videoEl.load();
+            }
             userAnswers = { a: 0, b: 0, c: 0 };
             answerHistory = [];
             currentResultHead = ""; 
@@ -371,11 +375,15 @@
             allGuestMessages = [];
             snap.forEach((doc) => { allGuestMessages.push(doc.data()); });
             renderGuestbook();
+        }, (error) => {
+            console.error("Firestore Snapshot 에러 케어:", error);
         });
 
         function renderGuestbook() {
             const container = document.getElementById('gb-list-container');
             const paginationContainer = document.getElementById('pagination');
+            if(!container || !paginationContainer) return;
+            
             container.innerHTML = ""; paginationContainer.innerHTML = "";
             const totalItems = allGuestMessages.length;
             const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -470,13 +478,31 @@
             nextPage('video'); 
             
             const videoEl = document.getElementById('loading-video');
+            if(!videoEl) return;
+
             if (finalType === 'a') videoEl.src = "Video Project 1.mp4";
             else if (finalType === 'b') videoEl.src = "Video Project 2.mp4";
             else videoEl.src = "Video Project 3.mp4";
 
             videoEl.load();
-            videoEl.play();
-            videoEl.onended = () => { calculateResult(); };
+            
+            // 모바일 하드웨어 환경 및 상시 구동 가속 버그 차단을 위해 명시적 재생 보장 프로미스 핸들링
+            const playPromise = videoEl.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {}).catch(error => {
+                    console.log("자동재생 제한 예외 처리 차단:", error);
+                    // 간혹 발생하는 iOS 하드웨어 가속 에러 시 즉시 결과로 우회하여 전시 다운 차단
+                    calculateResult(); 
+                });
+            }
+
+            videoEl.onended = () => { 
+                // [핵심 보완] 재생이 끝나면 즉시 소스를 끊어 브라우저 하드웨어 가속 메모리(VRAM) 누수를 완전 해제
+                videoEl.pause();
+                videoEl.src = "";
+                videoEl.load();
+                calculateResult(); 
+            };
         }
 
         async function calculateResult() {
@@ -505,18 +531,20 @@
                 descEl.innerText = "자신만의 기준으로 소비를 결정하는 방식"; currentResultHead = "head3.png"; 
             }
 
-            const q1Snap = await getDoc(doc(db, "surveyStats", "q1"));
-            if (q1Snap.exists()) {
-                const d = q1Snap.data();
-                const total = (d.A||0)+(d.B||0)+(d.C||0);
-                document.getElementById('total-participation-text').innerText = `현재 ${total}명이 참여했습니다`;
-                ['A','B','C'].forEach(id => {
-                    const count = d[id] || 0;
-                    const p = total > 0 ? Math.round((count/total)*100) : 0;
-                    document.getElementById(`bar-total-${id.toLowerCase()}`).style.width = p+"%";
-                    document.getElementById(`percent-total-${id.toLowerCase()}`).innerText = p+"%";
-                });
-            }
+            try {
+                const q1Snap = await getDoc(doc(db, "surveyStats", "q1"));
+                if (q1Snap.exists()) {
+                    const d = q1Snap.data();
+                    const total = (d.A||0)+(d.B||0)+(d.C||0);
+                    document.getElementById('total-participation-text').innerText = `현재 ${total}명이 참여했습니다`;
+                    ['A','B','C'].forEach(id => {
+                        const count = d[id] || 0;
+                        const p = total > 0 ? Math.round((count/total)*100) : 0;
+                        document.getElementById(`bar-total-${id.toLowerCase()}`).style.width = p+"%";
+                        document.getElementById(`percent-total-${id.toLowerCase()}`).innerText = p+"%";
+                    });
+                }
+            } catch(e) { console.error("결과 스탯 수신 에러 우회:", e); }
         }
     </script>
 </body>
