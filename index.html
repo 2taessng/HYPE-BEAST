@@ -6,7 +6,7 @@
     <title>HYPE BEAST TYPE TEST</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -71,6 +71,24 @@
         .page::-webkit-scrollbar-thumb { background: var(--btn-bg-main); border-radius: 10px; }
 
         .result-wrapper { width: 100%; margin: auto 0; display: flex; flex-direction: column; align-items: center; }
+        
+        /* 결과 화면 텍스트 스타일 수정 */
+        .result-category { font-weight: 900; font-size: 0.9rem; letter-spacing: 0.25em; color: rgba(0,0,0,0.7); display: block; margin-bottom: 1px; }
+        .result-name { font-weight: 900; font-size: 3.8rem; line-height: 1; margin: 0 0 12px 0; letter-spacing: -0.03em; }
+        .card-img-wrap { width: 100%; max-width: 460px; margin: 15px auto; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3)); }
+        .card-img { width: 100%; height: auto; border-radius: 12px; display: block; }
+        
+        /* 태그 두께 900(Black)으로 상향 및 설명과 대비 효과 */
+        #result-tag { font-weight: 900; font-size: 1.35rem; color: var(--text-black); border-bottom: 4px solid var(--text-black); display: inline-block; padding-bottom: 5px; margin-bottom: 8px; }
+        #result-desc { font-weight: 500; font-size: 0.95rem; color: var(--text-black); display: block; line-height: 1.4; opacity: 0.95; }
+
+        .total-stats { margin: 15px 0 10px 0; padding: 18px; background: #5666af; border-radius: 10px; text-align: left; width: 100%; box-sizing: border-box; }
+        .stat-header { font-weight: 900; font-size: 1.1rem; display: block; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 12px; }
+        .stat-row { display: flex; align-items: center; margin-bottom: 10px; font-size: 0.9rem; font-weight: 900; }
+        .stat-name { width: 60px; flex-shrink: 0; } 
+        .stat-bar-bg { flex-grow: 1; height: 9px; background: rgba(0,0,0,0.1); margin: 0 12px; border-radius: 5px; overflow: hidden; }
+        .stat-bar-fill { height: 100%; background: #232948; width: 0%; transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1); }
+        .stat-percent { width: 45px; text-align: right; flex-shrink: 0; }
 
         .gb-fixed-header { width: 100%; height: 50vh; display: flex; flex-direction: column; justify-content: center; flex-shrink: 0; z-index: 100; margin-bottom: -50px; }
         .gb-scroll-area { flex-grow: 1; overflow-y: auto; width: 100%; padding: 0 5px; box-sizing: border-box; }
@@ -95,24 +113,7 @@
         .main-btn { margin-top: 25px; padding: 15px 45px; background: var(--btn-bg-main); color: var(--btn-text-main); border: none; font-size: 1.2rem; font-weight: 700; cursor: pointer; letter-spacing: 0.1em; border-radius: 6px; transition: opacity 0.2s; }
         .main-btn:active { opacity: 0.8; transform: scale(0.95); }
 
-        .result-category { font-weight: 900; font-size: 0.9rem; letter-spacing: 0.25em; color: rgba(0,0,0,0.7); display: block; margin-bottom: 1px; }
-        .result-name { font-weight: 900; font-size: 3.8rem; line-height: 1; margin: 0 0 12px 0; letter-spacing: -0.03em; }
-        
-        .card-img-wrap { width: 100%; max-width: 460px; margin: 15px auto; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3)); }
-        .card-img { width: 100%; height: auto; border-radius: 12px; display: block; }
-        #result-tag { font-weight: 900; font-size: 1.35rem; color: var(--text-black); border-bottom: 4px solid var(--text-black); display: inline-block; padding-bottom: 5px; margin-bottom: 8px; }
-        #result-desc { font-weight: 700; font-size: 0.95rem; color: var(--text-black); display: block; line-height: 1.4; opacity: 0.9; }
-
-        .total-stats { margin: 15px 0 10px 0; padding: 18px; background: #5666af; border-radius: 10px; text-align: left; width: 100%; box-sizing: border-box; }
-        .stat-header { font-weight: 900; font-size: 1.1rem; display: block; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 12px; }
-        .stat-row { display: flex; align-items: center; margin-bottom: 10px; font-size: 0.9rem; font-weight: 900; }
-        .stat-name { width: 60px; flex-shrink: 0; } 
-        .stat-bar-bg { flex-grow: 1; height: 9px; background: rgba(0,0,0,0.1); margin: 0 12px; border-radius: 5px; overflow: hidden; }
-        .stat-bar-fill { height: 100%; background: #232948; width: 0%; transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1); }
-        .stat-percent { width: 45px; text-align: right; flex-shrink: 0; }
-
         .gb-title { font-weight: 900; font-size: 2.2rem; margin-bottom: 20px; display: block; color: var(--text-black); text-align: left; padding-left: 5px; width: 100%; }
-        
         .gb-input-box { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; width: 100%; }
         .gb-input-row { display: flex; gap: 10px; width: 100%; }
         .gb-input { padding: 15px; border: 3px solid var(--text-black); border-radius: 6px; font-family: inherit; font-weight: 900; font-size: 1rem; outline: none; background: rgba(255,255,255,0.1); color: var(--text-black); }
@@ -136,7 +137,6 @@
         .pagination { display: flex; justify-content: center; gap: 10px; margin: 10px 0; width: 100%; }
         .pg-btn { width: 48px; height: 48px; border: 3px solid #232948; background: transparent; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-family: inherit; color: #232948; font-size: 1.2rem; transition: all 0.2s; }
         .pg-btn.active { background: #232948; color: var(--btn-text-main); transform: scale(1.05); }
-        .pg-btn:disabled { opacity: 0.3; cursor: default; }
 
         #custom-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
         .modal-content { background: var(--main-bg); border: 4px solid var(--text-black); border-radius: 12px; padding: 35px; text-align: center; max-width: 320px; width: 80%; box-shadow: 0 15px 30px rgba(0,0,0,0.5); animation: slideUp 0.3s ease-out; }
@@ -267,9 +267,7 @@
                 console.error(`Wake Lock Error: ${err.name}, ${err.message}`);
             }
         };
-
         requestWakeLock();
-
         document.addEventListener('visibilitychange', async () => {
             if (wakeLock !== null && document.visibilityState === 'visible') {
                 requestWakeLock();
@@ -285,7 +283,6 @@
             appId: "1:165143291283:web:000e48b6091aa0a1c5b466",
             measurementId: "G-0Q8QJ5YDP4"
         };
-
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         
@@ -356,7 +353,6 @@
             const msgInput = document.getElementById('gb-input-field');
             const nickname = nickInput.value.trim();
             const msg = msgInput.value.trim();
-            
             try {
                 await addDoc(collection(db, "guestbook"), {
                     headImg: currentResultHead, 
@@ -382,23 +378,19 @@
             const container = document.getElementById('gb-list-container');
             const paginationContainer = document.getElementById('pagination');
             if(!container || !paginationContainer) return;
-            
             container.innerHTML = ""; paginationContainer.innerHTML = "";
             const totalItems = allGuestMessages.length;
             const totalPages = Math.ceil(totalItems / itemsPerPage);
             const startIndex = (currentPage - 1) * itemsPerPage;
             const currentData = allGuestMessages.slice(startIndex, startIndex + itemsPerPage);
-
             currentData.forEach((data, index) => {
                 const dateObj = data.timestamp ? data.timestamp.toDate() : new Date();
                 const timeStr = `${dateObj.getMonth()+1}/${dateObj.getDate()} ${dateObj.getHours()}:${String(dateObj.getMinutes()).padStart(2,'0')}`;
                 const item = document.createElement('div');
                 item.className = 'gb-item';
                 item.style.animationDelay = `${index * 0.08}s`;
-                
                 let headImg = data.headImg || "head1.png"; 
                 let nickname = data.nickname || "익명";
-                
                 item.innerHTML = `
                     <div class="gb-head-wrap"><img src="${headImg}" class="gb-head-img"></div>
                     <div class="gb-divider"></div>
@@ -411,7 +403,6 @@
                     </div>`;
                 container.appendChild(item);
             });
-
             if (totalPages > 1) {
                 const prevBtn = document.createElement('button');
                 prevBtn.className = 'pg-btn'; prevBtn.innerText = '<';
@@ -473,18 +464,13 @@
             if (b === maxVal) candidates.push('b');
             if (c === maxVal) candidates.push('c');
             let finalType = (candidates.length === 1) ? candidates[0] : answerHistory.slice().reverse().find(ans => candidates.includes(ans));
-
             nextPage('video'); 
-            
             const videoEl = document.getElementById('loading-video');
             if(!videoEl) return;
-
             if (finalType === 'a') videoEl.src = "Video Project 1.mp4";
             else if (finalType === 'b') videoEl.src = "Video Project 2.mp4";
             else videoEl.src = "Video Project 3.mp4";
-
             videoEl.load();
-            
             const playPromise = videoEl.play();
             if (playPromise !== undefined) {
                 playPromise.then(() => {}).catch(error => {
@@ -492,7 +478,6 @@
                     calculateResult(); 
                 });
             }
-
             videoEl.onended = () => { 
                 videoEl.pause();
                 videoEl.src = "";
@@ -516,16 +501,16 @@
             const descEl = document.getElementById('result-desc');
             const cardEl = document.getElementById('result-card');
 
-            // [수정] 신규 결과 태그 및 설명 텍스트 교체 반영
+            // [핵심 수정] 결과 태그 900 두께 강조 및 설명 텍스트 업데이트
             if (finalType === 'a') { 
                 nameEl.innerText = "KRU"; cardEl.src = "card1.png"; tagEl.innerText = "공감적 소비"; 
-                descEl.innerText = "함께 나누는 경험과 소속감에서 가치를 찾는다"; currentResultHead = "head1.png"; 
+                descEl.innerText = "함께 나누는 경험과 소속감에서 찾는 가치"; currentResultHead = "head1.png"; 
             } else if (finalType === 'b') { 
                 nameEl.innerText = "MAX"; cardEl.src = "card2.png"; tagEl.innerText = "선구적 소비"; 
-                descEl.innerText = "남들보다 빠른 경험과 희소성에서 가치를 찾는다"; currentResultHead = "head2.png"; 
+                descEl.innerText = "남들보다 빠른 경험과 희소성에서 찾는 가치"; currentResultHead = "head2.png"; 
             } else { 
                 nameEl.innerText = "HUGO"; cardEl.src = "card3.png"; tagEl.innerText = "주체적 소비"; 
-                descEl.innerText = "타인의 시선보다 나만의 확고한 기준에서 가치를 찾는다"; currentResultHead = "head3.png"; 
+                descEl.innerText = "타인의 시선보다 나만의 확고한 기준에서 찾는 가치"; currentResultHead = "head3.png"; 
             }
 
             try {
