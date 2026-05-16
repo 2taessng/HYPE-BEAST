@@ -306,7 +306,6 @@
         };
 
         window.resetTest = function() {
-            // [추가보완] 초기화 시 비디오 요소를 안전하게 한 번 더 비우고 GC 힌트 제공 (메모리 관리)
             const videoEl = document.getElementById('loading-video');
             if(videoEl) {
                 videoEl.pause();
@@ -486,18 +485,15 @@
 
             videoEl.load();
             
-            // 모바일 하드웨어 환경 및 상시 구동 가속 버그 차단을 위해 명시적 재생 보장 프로미스 핸들링
             const playPromise = videoEl.play();
             if (playPromise !== undefined) {
                 playPromise.then(() => {}).catch(error => {
                     console.log("자동재생 제한 예외 처리 차단:", error);
-                    // 간혹 발생하는 iOS 하드웨어 가속 에러 시 즉시 결과로 우회하여 전시 다운 차단
                     calculateResult(); 
                 });
             }
 
             videoEl.onended = () => { 
-                // [핵심 보완] 재생이 끝나면 즉시 소스를 끊어 브라우저 하드웨어 가속 메모리(VRAM) 누수를 완전 해제
                 videoEl.pause();
                 videoEl.src = "";
                 videoEl.load();
@@ -520,15 +516,16 @@
             const descEl = document.getElementById('result-desc');
             const cardEl = document.getElementById('result-card');
 
+            // [수정] 신규 결과 태그 및 설명 텍스트 교체 반영
             if (finalType === 'a') { 
-                nameEl.innerText = "KRU"; cardEl.src = "card1.png"; tagEl.innerText = "공감과 소속"; 
-                descEl.innerText = "집단의 흐름 속에서 함께 선택하는 방식"; currentResultHead = "head1.png"; 
+                nameEl.innerText = "KRU"; cardEl.src = "card1.png"; tagEl.innerText = "공감적 소비"; 
+                descEl.innerText = "함께 나누는 경험과 소속감에서 가치를 찾는다"; currentResultHead = "head1.png"; 
             } else if (finalType === 'b') { 
-                nameEl.innerText = "MAX"; cardEl.src = "card2.png"; tagEl.innerText = "유행의 선점"; 
-                descEl.innerText = "누구보다 빠르게 트렌드를 선택하는 방식"; currentResultHead = "head2.png"; 
+                nameEl.innerText = "MAX"; cardEl.src = "card2.png"; tagEl.innerText = "선구적 소비"; 
+                descEl.innerText = "남들보다 빠른 경험과 희소성에서 가치를 찾는다"; currentResultHead = "head2.png"; 
             } else { 
-                nameEl.innerText = "HUGO"; cardEl.src = "card3.png"; tagEl.innerText = "취향의 독립"; 
-                descEl.innerText = "자신만의 기준으로 소비를 결정하는 방식"; currentResultHead = "head3.png"; 
+                nameEl.innerText = "HUGO"; cardEl.src = "card3.png"; tagEl.innerText = "주체적 소비"; 
+                descEl.innerText = "타인의 시선보다 나만의 확고한 기준에서 가치를 찾는다"; currentResultHead = "head3.png"; 
             }
 
             try {
